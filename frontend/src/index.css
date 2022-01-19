@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap");
+
+@layer utilities {
+  .__text-elipsis-one-line {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* number of lines to show */
+    -webkit-box-orient: vertical;
+  }
+  .__text-elipsis-two-line {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
+  }
+  .__text-elipsis-many-line {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 5; /* number of lines to show */
+    -webkit-box-orient: vertical;
+  }
+  .__montserat-text {
+    font-family: "Montserrat", sans-serif;
+  }
+  .__poppins-text {
+    font-family: "Poppins", sans-serif;
+  }
+  @variants responsive {
+    .mycontainer {
+      width: 95%;
+      margin: auto;
+    }
+    .mycontainer-sm {
+      width: 87%;
+      margin: auto;
+    }
+    .mycontainerfull {
+      width: 100%;
+      margin: auto;
+    }
+  }
+}
+
+.__styled-border-x::-webkit-scrollbar {
+  width: 0;
+  height: 5px;
+}
+
+.__styled-border-x::-webkit-scrollbar-thumb {
+  background-color: rgb(211, 211, 211);
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.__styled-border-x::-webkit-scrollbar-track {
+  background-color: whitesmoke;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: "Poppins", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
