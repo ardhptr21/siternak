@@ -1,0 +1,20 @@
+{
+  "name": "api-siternak",
+  "version": "0.1.0",
+  "main": "index.js",
+  "repository": "https://github.com/bhak-ti/siternak/",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "dotenv": "^14.2.0",
+    "express": "^4.17.2",
+    "mongoose": "^6.1.7"
+  },
+  "devDependencies": {
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.15"
+  }
+}
