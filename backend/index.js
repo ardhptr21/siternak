@@ -25,11 +25,13 @@ app.use(express.json());
  *---------------------------------------------**/
 const userRoutes = require('./routes/user.routes');
 const productRoutes = require('./routes/product.routes');
+const authRoutes = require('./routes/auth.routes');
 
 app.use('/user', userRoutes);
 app.use('/products', productRoutes);
+app.use('/auth', authRoutes);
 
-app.get('/', (req, res) => {
+app.get('/', (_, res) => {
   res.send('Hello World, Welcome to Siternak API');
 });
 
