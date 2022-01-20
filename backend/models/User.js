@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema(
       required: [true, "Email can't be empty"],
       type: String,
       validate: {
-        validator: (v) => !Joi.string().uri({ allowRelative: false }).validate(v).error,
+        validator: (v) => !Joi.string().email({ allowUnicode: false }).validate(v).error,
         message: 'Invalid email',
       },
     },
