@@ -32,3 +32,20 @@ module.exports.create = async (req, res) => {
     res.status(409).json({ status: 409, success: false, message: err.message });
   }
 };
+
+/**
+ * Delete a product
+ *
+ * @param {request} req
+ * @param {response} res
+ */
+module.exports.delete = async (req, res) => {
+  const product_id = req.params.product_id;
+
+  try {
+    await Product.findByIdAndDelete(product_id);
+    res.status(200).json({ status: 200, success: true, message: 'Product deleted' });
+  } catch (err) {
+    res.status(500).json({ status: 500, success: false, message: err.message });
+  }
+};
