@@ -11,8 +11,24 @@ module.exports.getAll = async (req, res) => {
   try {
     const products = await Product.find();
     res.status(200).json({ status: 200, success: true, data: products });
-  } catch (error) {
-    res.status(500).json({ status: 500, success: false, message: error.message });
+  } catch (err) {
+    res.status(500).json({ status: 500, success: false, message: err.message });
+  }
+};
+
+/**
+ * Get specific product
+ *
+ * @param {request} req
+ * @param {response} res
+ */
+module.exports.getOne = async (req, res) => {
+  const slug = req.params.slug;
+  try {
+    const product = await Product.findById(slug);
+    res.status(200).json({ status: 200, success: true, data: product });
+  } catch (err) {
+    res.status(500).json({ status: 409, success: false, message: err.message });
   }
 };
 
@@ -45,6 +61,32 @@ module.exports.delete = async (req, res) => {
   try {
     await Product.findByIdAndDelete(product_id);
     res.status(200).json({ status: 200, success: true, message: 'Product deleted' });
+  } catch (err) {
+    res.status(500).json({ status: 500, success: false, message: err.message });
+  }
+};
+
+/**
+ * Update a product
+ *
+ * @param {request} req
+ * @param {response} res
+ */
+module.exports.update = async (req, res) => {
+  const product_id = req.params.product_id;
+  const { name, price, description, stock, image } = req.body;
+
+  const updatedProduct = {};
+
+  if (name) updatedProduct.name = name;
+  if (price) updatedProduct.price = price;
+  if (description) updatedProduct.description = description;
+  if (stock) updatedProduct.stock = stock;
+  if (image) updatedProduct.image = image;
+
+  try {
+    const product = await Product.findByIdAndUpdate(product_id, updatedProduct, { new: true, runValidators: true });
+    res.status(200).json({ status: 200, success: true, data: product });
   } catch (err) {
     res.status(500).json({ status: 500, success: false, message: err.message });
   }
