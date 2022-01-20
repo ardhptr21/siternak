@@ -26,3 +26,23 @@ module.exports.login = async (req, res) => {
     return res.status(500).json({ status: 500, success: false, message: 'Something went wrong' });
   }
 };
+
+/**
+ * Verify token
+ *
+ * @param {request} req
+ * @param {response} res
+ */
+module.exports.verify = async (req, res) => {
+  const TOKEN = req.header('Authorization');
+  if (!TOKEN) return res.status(401).json({ status: 401, verify: false, message: 'Token is not provided' });
+  try {
+    const decoded = jwt.verify(TOKEN, process.env.SECRET_JWT_KEY);
+    const user = await User.findById(decoded.userId);
+    if (!user) return res.status(400).json({ status: 400, verify: false, message: 'User not found' });
+    return res.status(200).json({ status: 200, verify: true, message: 'Token is valid' });
+  } catch (err) {
+    res.status(500).json({ status: 500, verify: false, message: 'Something went wrong' });
+    console.log(err);
+  }
+};
