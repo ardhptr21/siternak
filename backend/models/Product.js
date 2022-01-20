@@ -13,7 +13,6 @@ const productSchema = new mongoose.Schema(
     },
     slug: {
       type: String,
-      required: [true, "Slug can't be empty"],
     },
     price: {
       type: Number,
@@ -37,9 +36,8 @@ const productSchema = new mongoose.Schema(
   }
 );
 
-productSchema.pre('save', (next) => {
-  this.slug = this.name.replace(/\s+/g, '-').toLowerCase() + '-' + nanoid();
-  next();
+productSchema.post('validate', (doc) => {
+  doc.slug = doc.name.toLowerCase().replace(/\s/g, '-') + '-' + nanoid(6);
 });
 
 module.exports = mongoose.model('Product', productSchema);

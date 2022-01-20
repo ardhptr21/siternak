@@ -24,8 +24,10 @@ app.use(express.json());
  *               ROUTES
  *---------------------------------------------**/
 const userRoutes = require('./routes/user.routes');
+const productRoutes = require('./routes/product.routes');
 
 app.use('/user', userRoutes);
+app.use('/products', productRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello World, Welcome to Siternak API');
