@@ -25,6 +25,46 @@ const userSchema = new mongoose.Schema(
         message: 'Telephone can only contain numbers',
       },
     },
+    address: {
+      type: {
+        _id: false,
+        province: {
+          type: String,
+          required: [true, "Province can't be empty"],
+        },
+        city: {
+          type: String,
+          required: [true, "City can't be empty"],
+        },
+        district: {
+          type: String,
+          required: [true, "District can't be empty"],
+        },
+        detail: {
+          type: String,
+          required: [true, "Detail can't be empty"],
+        },
+      },
+    },
+    photo: {
+      required: false,
+      type: String,
+    },
+    role: {
+      type: Number,
+      required: true,
+      default: 1,
+    },
+    isSeller: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    _shopId: {
+      type: mongoose.Types.ObjectId,
+      required: false,
+      default: null,
+    },
     email: {
       required: [true, "Email can't be empty"],
       type: String,
@@ -36,10 +76,6 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, "Password can't be empty"],
-    },
-    photo: {
-      required: false,
-      type: String,
     },
   },
   {

@@ -33,10 +33,22 @@ module.exports.get = async (req, res) => {
  * @param {response} res
  */
 module.exports.create = async (req, res) => {
-  const { name, username, telephone, email, password } = req.body;
+  const { name, username, telephone, province, city, district, detail, email, password } = req.body;
 
   try {
-    const user = await User.create({ name, username, telephone, email, password });
+    const user = await User.create({
+      name,
+      username,
+      telephone,
+      address: {
+        province,
+        city,
+        district,
+        detail,
+      },
+      email,
+      password,
+    });
     return res.status(200).json({ status: 201, success: true, data: { user_id: user._id } });
   } catch (err) {
     res.status(409).json({ status: 409, success: false, message: err.message });
