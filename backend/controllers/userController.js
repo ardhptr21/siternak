@@ -1,5 +1,6 @@
 const { request, response } = require('express');
 const User = require('../models/User');
+const cloudinaryInstance = require('../configs/cloudinary.config');
 
 /**
  * Get user by id
@@ -50,6 +51,36 @@ module.exports.create = async (req, res) => {
       password,
     });
     return res.status(200).json({ status: 201, success: true, data: { user_id: user._id } });
+  } catch (err) {
+    res.status(409).json({ status: 409, success: false, message: err.message });
+    console.log(err);
+  }
+};
+
+/**
+ * Update user profile photo
+ *
+ * @param {request} req
+ * @param {response} res
+ */
+module.exports.updatePhoto = async (req, res) => {
+  const user_id = req.params.user_id;
+  try {
+    const result = await cloudinaryInstance.uploader.upload(req.file.path, {
+      public_id: `${user_id}_photo`,
+      width: 500,
+      height: 500,
+      crop: 'fill',
+      folder: 'siternak/users',
+    });
+
+    const user = await User.findByIdAndUpdate(
+      user_id,
+      { photo: result.secure_url },
+      { new: true, runValidators: true }
+    );
+    delete user._doc.password;
+    res.status(200).json({ status: 200, success: true, data: user });
   } catch (err) {
     res.status(409).json({ status: 409, success: false, message: err.message });
     console.log(err);
