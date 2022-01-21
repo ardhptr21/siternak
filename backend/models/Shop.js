@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { nanoid } = require('nanoid');
 
 const shopSchema = new mongoose.Schema({
   _userId: {
@@ -16,8 +17,11 @@ const shopSchema = new mongoose.Schema({
   },
   slug: {
     type: String,
-    required: [true, "Shop slug can't be empty"],
   },
+});
+
+shopSchema.post('validate', (doc) => {
+  doc.slug = doc.name.toLowerCase().replace(/\s/g, '-') + nanoid(6);
 });
 
 module.exports = mongoose.model('Shop', shopSchema);
