@@ -60,11 +60,6 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: false,
     },
-    _shopId: {
-      type: mongoose.Types.ObjectId,
-      required: false,
-      default: null,
-    },
     email: {
       required: [true, "Email can't be empty"],
       type: String,
