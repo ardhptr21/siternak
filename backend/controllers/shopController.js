@@ -70,3 +70,25 @@ module.exports.delete = async (req, res) => {
     res.status(500).json({ status: 500, success: false, message: err.message });
   }
 };
+
+/**
+ * Update Shop
+ *
+ * @param {request} req
+ * @param {response} res
+ */
+module.exports.update = async (req, res) => {
+  const { name, description } = req.body;
+  const id = req.params.id;
+
+  const updatedShop = {};
+  if (name) updatedShop.name = name;
+  if (description) updatedShop.description = description;
+
+  try {
+    const shop = await Shop.findByIdAndUpdate(id, updatedShop, { new: true, runValidators: true });
+    res.status(200).json({ status: 200, success: true, data: shop });
+  } catch (err) {
+    res.status(409).json({ status: 409, success: false, message: err.message });
+  }
+};

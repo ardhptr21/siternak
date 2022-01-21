@@ -21,7 +21,7 @@ const shopSchema = new mongoose.Schema({
 });
 
 shopSchema.post('validate', (doc) => {
-  doc.slug = doc.name.toLowerCase().replace(/\s/g, '-') + nanoid(6);
+  doc.slug = doc.name.toLowerCase().replace(/\s/g, '-') + '-' + nanoid(6);
 });
 
 module.exports = mongoose.model('Shop', shopSchema);
