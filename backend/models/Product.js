@@ -14,6 +14,10 @@ const productSchema = new mongoose.Schema(
     slug: {
       type: String,
     },
+    _categoryId: {
+      type: mongoose.Types.ObjectId,
+      required: [true, "Category can't be empty"],
+    },
     price: {
       type: Number,
       required: [true, "Price can't be empty"],

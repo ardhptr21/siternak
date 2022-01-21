@@ -25,7 +25,7 @@ module.exports.getAll = async (req, res) => {
 module.exports.getOne = async (req, res) => {
   const slug = req.params.slug;
   try {
-    const product = await Product.findById(slug);
+    const product = await Product.findOne({ slug });
     res.status(200).json({ status: 200, success: true, data: product });
   } catch (err) {
     res.status(500).json({ status: 409, success: false, message: err.message });
@@ -39,10 +39,18 @@ module.exports.getOne = async (req, res) => {
  * @param {response} res
  */
 module.exports.create = async (req, res) => {
-  const { user_id, name, price, description, stock, image } = req.body;
+  const { user_id, name, price, description, category_id, stock, image } = req.body;
 
   try {
-    const product = await Product.create({ _userId: user_id, name, price, description, stock, image });
+    const product = await Product.create({
+      _userId: user_id,
+      _categoryId: category_id,
+      name,
+      price,
+      description,
+      stock,
+      image,
+    });
     res.status(201).json({ status: 201, success: true, data: product });
   } catch (err) {
     res.status(409).json({ status: 409, success: false, message: err.message });
@@ -74,12 +82,13 @@ module.exports.delete = async (req, res) => {
  */
 module.exports.update = async (req, res) => {
   const product_id = req.params.product_id;
-  const { name, price, description, stock, image } = req.body;
+  const { name, price, category_id, description, stock, image } = req.body;
 
   const updatedProduct = {};
 
   if (name) updatedProduct.name = name;
   if (price) updatedProduct.price = price;
+  if (category_id) updatedProduct._categoryId = category_id;
   if (description) updatedProduct.description = description;
   if (stock) updatedProduct.stock = stock;
   if (image) updatedProduct.image = image;

@@ -47,7 +47,7 @@ module.exports.update = async (req, res) => {
   if (description) updatedCategory.description = description;
 
   try {
-    const category = await Category.findByIdAndUpdate(id, updatedCategory, { new: true });
+    const category = await Category.findByIdAndUpdate(id, updatedCategory, { new: true, runValidators: true });
     res.status(200).json({ status: 200, success: true, message: 'Category updated successfully', data: category });
   } catch (err) {
     res.status(409).json({ status: 409, success: false, message: err.message });
