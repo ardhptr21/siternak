@@ -76,6 +76,43 @@ module.exports.create = async (req, res) => {
 };
 
 /**
+ * Update user
+ * @param {request} req
+ * @param {response} res
+ */
+module.exports.update = async (req, res) => {
+  const user_id = req.params.user_id;
+  const { name, username, telephone, province, city, district, detail } = req.body;
+
+  const updated_user = {};
+
+  if (name) updated_user.name = name;
+  if (username) updated_user.username = username;
+  if (telephone) updated_user.telephone = telephone;
+
+  if (province) updated_user['address.province'] = province;
+  if (city) updated_user['address.city'] = city;
+  if (district) updated_user['address.district'] = district;
+  if (detail) updated_user['address.detail'] = detail;
+
+  // console.log(updated_user);
+  // return res.send('ok');
+  try {
+    const user = await User.findByIdAndUpdate(user_id, updated_user, { new: true, runValidators: true });
+
+    if (!user) {
+      return res.status(404).json({ status: 404, success: false, message: 'User not found' });
+    }
+
+    delete user._doc.password;
+
+    return res.status(200).json({ status: 200, success: true, data: user });
+  } catch (err) {
+    return res.status(409).json({ status: 409, success: false, message: err.message });
+  }
+};
+
+/**
  * Update user profile photo
  *
  * @param {request} req
