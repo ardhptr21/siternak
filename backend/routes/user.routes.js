@@ -1,10 +1,10 @@
 const router = require('express').Router();
 const userController = require('../controllers/userController');
-const { isAuth } = require('../middlewares/authMiddleware');
+const { isAuth, isAdmin } = require('../middlewares/authMiddleware');
 const multerInstance = require('../configs/multer.config');
 
-router.post('/', userController.create);
-router.post('/:user_id/photo', isAuth, multerInstance.single('photo'), userController.updatePhoto);
-router.get('/:user_id', userController.get);
+router.patch('/:user_id/photo', isAuth, multerInstance.single('photo'), userController.updatePhoto);
+router.route('/:user_id').get(userController.get).delete(isAdmin, userController.delete);
+router.route('/').get(isAdmin, userController.getAll).post(userController.create);
 
 module.exports = router;

@@ -3,6 +3,24 @@ const User = require('../models/User');
 const cloudinaryInstance = require('../configs/cloudinary.config');
 
 /**
+ * Get all users
+ *
+ * @param {request} req
+ * @param {response} res
+ */
+module.exports.getAll = async (_, res) => {
+  try {
+    const users = await User.find();
+
+    users.map((user) => delete user._doc.password);
+
+    return res.status(200).json({ status: 200, success: true, data: users });
+  } catch (err) {
+    return res.status(500).json({ status: 500, success: false, message: err.message });
+  }
+};
+
+/**
  * Get user by id
  *
  * @param {request} req
@@ -84,5 +102,27 @@ module.exports.updatePhoto = async (req, res) => {
   } catch (err) {
     res.status(409).json({ status: 409, success: false, message: err.message });
     console.log(err);
+  }
+};
+
+/**
+ * Delete user by id
+ *
+ * @param {request} req
+ * @param {response} res
+ */
+module.exports.delete = async (req, res) => {
+  const user_id = req.params.user_id;
+
+  try {
+    const user = await User.findByIdAndDelete(user_id);
+
+    if (!user) {
+      return res.status(404).json({ status: 404, success: false, message: 'User not found' });
+    }
+
+    return res.status(200).json({ status: 200, success: true, message: 'User deleted' });
+  } catch (err) {
+    return res.status(500).json({ status: 500, success: false, message: err.message });
   }
 };
