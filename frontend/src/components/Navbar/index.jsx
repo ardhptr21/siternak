@@ -5,7 +5,7 @@ import { staticConst } from '../../static/staticConst';
 import { RiShoppingCartLine } from 'react-icons/ri';
 import { CgProfile } from 'react-icons/cg';
 import { MdStorefront } from 'react-icons/md';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Modal from '../Modal';
 import Login from '../Login';
@@ -21,7 +21,7 @@ const Navbar = () => {
   const [modalComponent, setModalComponent] = useState(null);
 
   useEffect(() => {
-    setModalComponent(<Login setModalComponent={setModalComponent} />);
+    setModalComponent(<Login setModalComponent={setModalComponent} setHandleModal={setHandleModal} />);
   }, []);
 
   const handleSearch = (e) => {
@@ -35,9 +35,9 @@ const Navbar = () => {
   return (
     <div className="fixed z-20 w-screen bg-white shadow-md">
       <div className="mycontainer flex justify-between items-center py-0.5">
-        <a href="/">
+        <Link to="/">
           <img src="/assets/logo_si_ternak.png" alt="Logo" className="w-16" />
-        </a>
+        </Link>
         <div className="grid grid-flow-col p-1 bg-gray-100 divide-x-2 rounded max-w-max">
           <Dropdown noBorder={true} dropdownOpts={categoriesOptions} />
           <Input placeholder="Search" onChange={handleSearch} customStyles="bg-transparent" />
@@ -53,12 +53,17 @@ const Navbar = () => {
           )}
           {user.isLoggedIn && (
             <>
-              <div className="relative inline-block cursor-pointer ">
-                <MdStorefront className="text-xl" />
-              </div>
-              <div className="relative inline-block cursor-pointer">
-                <CgProfile className="text-xl" />
-              </div>
+              <Link
+                to="/user-profile/bio"
+                className="flex items-center justify-center gap-5 px-5 py-2 border-2 rounded-md"
+              >
+                <div className="relative inline-block cursor-pointer ">
+                  <MdStorefront className="text-xl" />
+                </div>
+                <div className="relative inline-block cursor-pointer">
+                  <CgProfile className="text-xl" />
+                </div>
+              </Link>
               <div
                 className="relative inline-block cursor-pointer"
                 onClick={() => navigation('my-cart', { replace: true })}

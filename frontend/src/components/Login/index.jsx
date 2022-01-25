@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { loginUser } from '../../actions/user/userActions';
 import { useState } from 'react';
 
-const Login = ({ setModalComponent }) => {
+const Login = ({ setModalComponent, setHandleModal }) => {
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState('');
@@ -12,6 +12,7 @@ const Login = ({ setModalComponent }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(loginUser(email, password));
+    setHandleModal(false);
   };
 
   return (
@@ -21,7 +22,9 @@ const Login = ({ setModalComponent }) => {
         Belum Punya Akun?{' '}
         <span
           className="cursor-pointer text-warning"
-          onClick={() => setModalComponent(<Register setModalComponent={setModalComponent} />)}
+          onClick={() =>
+            setModalComponent(<Register setModalComponent={setModalComponent} setHandleModal={setHandleModal} />)
+          }
         >
           Register
         </span>

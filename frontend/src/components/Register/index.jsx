@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { registerUser } from '../../actions/user/userActions';
 import Login from '../Login';
 
-const Register = ({ setModalComponent }) => {
+const Register = ({ setModalComponent, setHandleModal }) => {
   const dispatch = useDispatch();
 
   const [dataRegister, setDataRegister] = useState({
@@ -20,7 +20,7 @@ const Register = ({ setModalComponent }) => {
 
   const handleRegister = (e) => {
     dispatch(registerUser(dataRegister));
-    setModalComponent(<Login setModalComponent={setModalComponent} />);
+    setModalComponent(<Login setModalComponent={setModalComponent} setHandleModal={setHandleModal} />);
     e.preventDefault();
   };
 
@@ -35,7 +35,9 @@ const Register = ({ setModalComponent }) => {
         Sudah Punya Akun?{' '}
         <span
           className="cursor-pointer text-warning"
-          onClick={() => setModalComponent(<Login setModalComponent={setModalComponent} />)}
+          onClick={() =>
+            setModalComponent(<Login setModalComponent={setModalComponent} setHandleModal={setHandleModal} />)
+          }
         >
           Masuk
         </span>
