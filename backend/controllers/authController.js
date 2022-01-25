@@ -21,7 +21,7 @@ module.exports.login = async (req, res) => {
 
     if (!isValidPassword) return res.status(400).json({ status: 400, success: false, message: 'Invalid password' });
     const TOKEN = jwt.sign({ userId: user._id }, process.env.SECRET_JWT_KEY);
-    return res.status(200).json({ status: 200, success: true, message: 'Login success', token: TOKEN });
+    return res.status(200).json({ status: 200, success: true, message: 'Login success', data: { user, token: TOKEN } });
   } catch (err) {
     return res.status(500).json({ status: 500, success: false, message: 'Something went wrong' });
   }

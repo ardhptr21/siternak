@@ -1,8 +1,21 @@
 import Register from '../Register';
+import { useDispatch } from 'react-redux';
+import { loginUser } from '../../actions/user/userActions';
+import { useState } from 'react';
 
 const Login = ({ setModalComponent }) => {
+  const dispatch = useDispatch();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(loginUser(email, password));
+  };
+
   return (
-    <div className="px-10 py-6 bg-white rounded-md max-w-max __montserat-text">
+    <form onSubmit={handleSubmit} className="px-10 py-6 bg-white rounded-md max-w-max __montserat-text">
       <h1 className="pt-4 text-2xl font-bold text-center">Login</h1>
       <p className="text-xs text-center text-subtitle">
         Belum Punya Akun?{' '}
@@ -15,9 +28,11 @@ const Login = ({ setModalComponent }) => {
       </p>
       <div className="mt-4 mb-7">
         <div className="flex flex-col pt-0 mb-3">
-          <label className="text-sm font-medium text-subtitle">Email / no. tlpn</label>
+          <label className="text-sm font-medium text-subtitle">Email</label>
           <input
-            type="text"
+            type="email"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
             className="px-3 py-3 mt-2 text-sm bg-white border border-gray-200 rounded outline-none placeholder-blueGray-300 text-blueGray-600 focus:border-gray-400 focus:outline-none focus:ring-0"
             style={{ width: 330 }}
           />
@@ -27,7 +42,9 @@ const Login = ({ setModalComponent }) => {
           <label className="text-sm font-medium text-subtitle">Password</label>
           <div>
             <input
-              type="text"
+              type="password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
               className="relative px-3 py-3 pl-20 mt-2 text-sm bg-white border border-gray-200 rounded outline-none placeholder-blueGray-300 text-blueGray-600 focus:outline-none focus:ring-0 focus:border-gray-400"
               style={{ width: 330 }}
             />
@@ -47,7 +64,7 @@ const Login = ({ setModalComponent }) => {
           Butuh bantuan? <span className="cursor-pointer text-warning">Hubungi ITernak Care</span>
         </p>
       </div>
-    </div>
+    </form>
   );
 };
 

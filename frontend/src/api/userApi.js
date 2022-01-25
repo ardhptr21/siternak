@@ -7,3 +7,11 @@ export const addNewUser = async (data) => {
     console.log(err.message);
   }
 };
+
+export const signInUser = async (email, password) => {
+  try {
+    return await axiosInstance.post('/auth/login', { email, password });
+  } catch (err) {
+    console.log(err.message);
+  }
+};

@@ -2,6 +2,7 @@ import { LOGIN, LOGOUT, REGISTER } from '../actions/user/userTypes';
 
 const initialState = {
   isLoggedIn: false,
+  token: '',
   id: '',
   name: '',
   username: '',
