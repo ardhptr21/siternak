@@ -1,7 +1,7 @@
-import { GiSheep, GiCow, GiChicken } from 'react-icons/gi'
-import { GrSend, GrCreditCard } from 'react-icons/gr'
-import { RiFileList2Line, RiStore2Line } from 'react-icons/ri'
-import { HiOutlineTag } from 'react-icons/hi'
+import { GiSheep, GiCow, GiChicken } from 'react-icons/gi';
+import { GrSend, GrCreditCard } from 'react-icons/gr';
+import { RiFileList2Line, RiStore2Line } from 'react-icons/ri';
+import { HiOutlineTag } from 'react-icons/hi';
 
 export const staticConst = {
   categoriesOptions: [
@@ -116,7 +116,7 @@ export const staticConst = {
             ],
           },
         },
-      ]
+      ],
     },
     user: {
       name: 'James Adam',
@@ -125,10 +125,7 @@ export const staticConst = {
         {
           menu: {
             title: 'Menu',
-            subMenu: [
-              { name: 'Profile', path: '/user-profile/bio' },
-              { name: 'Alamat', path: '/user-profile/dashboard_content' },
-            ],
+            subMenu: [{ name: 'Profile', path: '/user-profile/bio' }],
           },
         },
         {
@@ -145,7 +142,7 @@ export const staticConst = {
             ],
           },
         },
-      ]
+      ],
     },
   },
   userStaticData: {
@@ -261,8 +258,7 @@ export const staticConst = {
     },
     {
       _id: 12,
-      product_name:
-        'Sapi Lokal Grade A+ | Sapi Brahman Premium - Kondisi Sehat',
+      product_name: 'Sapi Lokal Grade A+ | Sapi Brahman Premium - Kondisi Sehat',
       product_desc:
         "Ternak kualitas terbaik yang dirawat seperti anak sendiri, It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
       price: 1000000,
@@ -296,4 +292,4 @@ export const staticConst = {
       product_image: '/assets/luke-stackpoole-RxHhxWnXmNs-unsplash.jpg',
     },
   ],
-}
+};

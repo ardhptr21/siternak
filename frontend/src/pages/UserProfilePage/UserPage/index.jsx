@@ -4,6 +4,8 @@ import { IoMdLogOut } from 'react-icons/io';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '../../../actions/user/userActions';
 import { useNavigate } from 'react-router-dom';
+import DashboardData from '../../../components/DashboardData';
+import DashboardDataContainer from '../../../components/DashboardDataContainer';
 
 const UserPage = () => {
   const navigation = useNavigate();
@@ -31,7 +33,7 @@ const UserPage = () => {
       </div>
       <div className="flex justify-between pb-16 border-b-8 border-gray-200">
         <div className="flex">
-          <div>
+          <div className={!isEdit && 'w-850'}>
             <img
               src="/assets/Untitled designrandoongrokgfn354tygregghehwerergerg.png"
               alt="profile_pict"
@@ -59,139 +61,25 @@ const UserPage = () => {
             </div>
           </div>
           <div className="ml-12">
-            <div>
-              <div className="font-semibold">Biodata</div>
-              <div className="grid grid-cols-2 mt-3 text-sm gap-x-11 gap-y-4 text-subtitle">
-                <div>Nama</div>
-                {isEdit ? (
-                  <input
-                    value={user.name}
-                    type="search"
-                    class="
-                      form-control
-                      block
-                      w-full
-                      px-3
-                      py-1.5
-                      text-base
-                      font-normal
-                      text-gray-700
-                      bg-white bg-clip-padding
-                      border border-solid border-gray-300
-                      rounded
-                      transition
-                      ease-in-out
-                      mt-1 mb-1
-                      focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
-                    "
-                    id="exampleSearch"
-                    placeholder="Pencarian"
-                  />
-                ) : (
-                  <div>{user.name}</div>
-                )}
-
-                <div>Email</div>
-                {isEdit ? (
-                  <input
-                    value={user.email}
-                    type="search"
-                    class="
-                      form-control
-                      block
-                      w-full
-                      px-3
-                      py-1.5
-                      text-base
-                      font-normal
-                      text-gray-700
-                      bg-white bg-clip-padding
-                      border border-solid border-gray-300
-                      rounded
-                      transition
-                      ease-in-out
-                      mt-1 mb-1
-                      focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
-                    "
-                    id="exampleSearch"
-                    placeholder="Pencarian"
-                  />
-                ) : (
-                  <div>{user.email}</div>
-                )}
-
-                <div>no. tlpn</div>
-                {isEdit ? (
-                  <input
-                    value={user.telephone}
-                    type="search"
-                    class="
-                      form-control
-                      block
-                      w-full
-                      px-3
-                      py-1.5
-                      text-base
-                      font-normal
-                      text-gray-700
-                      bg-white bg-clip-padding
-                      border border-solid border-gray-300
-                      rounded
-                      transition
-                      ease-in-out
-                      mt-1 mb-1
-                      focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
-                    "
-                    id="exampleSearch"
-                    placeholder="Pencarian"
-                  />
-                ) : (
-                  <div>{user.telephone}</div>
-                )}
-
-                {user.isSeller && (
-                  <>
-                    <div>Nama Toko</div>
-                    {isEdit ? (
-                      <input
-                        value={'GENTON SHOP'}
-                        type="search"
-                        class="
-                          form-control
-                          block
-                          w-full
-                          px-3
-                          py-1.5
-                          text-base
-                          font-normal
-                          text-gray-700
-                          bg-white bg-clip-padding
-                          border border-solid border-gray-300
-                          rounded
-                          transition
-                          ease-in-out
-                          mt-1 mb-1
-                          focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
-                        "
-                        id="exampleSearch"
-                        placeholder="Pencarian"
-                      />
-                    ) : (
-                      <div>GENTON SHOP</div>
-                    )}
-                  </>
-                )}
-
-                {isEdit && (
-                  <button className="bg-transparent mt-32 flex justify-between hover:text-textDefault transition hover:border-textDefault items-center text-sm font-medium text-subtitle py-1.5 px-3 border rounded-full">
-                    SIMPAN
-                    <span>
-                      <BsCheckLg className="ml-2 text-sm" />
-                    </span>
-                  </button>
-                )}
-              </div>
-            </div>
+            <DashboardDataContainer title="Biodata">
+              <DashboardData title="Nama" value={user.name} isEdit={isEdit} />
+              <DashboardData title="Email" value={user.email} isEdit={isEdit} />
+              <DashboardData title="Telepon" value={user.telephone} isEdit={isEdit} />
+            </DashboardDataContainer>
+            <DashboardDataContainer title="Alamat" margin="mt-5">
+              <DashboardData title="Provinsi" value={user.address.province} isEdit={isEdit} />
+              <DashboardData title="Kota/Kab" value={user.address.city} isEdit={isEdit} />
+              <DashboardData title="Kecamatan" value={user.address.district} isEdit={isEdit} />
+              <DashboardData title="Detail" value={user.address.detail} isEdit={isEdit} isTextarea={true} />
+              {isEdit && (
+                <button className="bg-transparent mt-32 flex justify-between hover:text-textDefault transition hover:border-textDefault items-center text-sm font-medium text-subtitle py-1.5 px-3 border rounded-full">
+                  SIMPAN
+                  <span>
+                    <BsCheckLg className="ml-2 text-sm" />
+                  </span>
+                </button>
+              )}
+            </DashboardDataContainer>
           </div>
         </div>
       </div>
