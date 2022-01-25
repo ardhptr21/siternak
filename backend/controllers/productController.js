@@ -1,5 +1,7 @@
 const { request, response } = require('express');
+const { Types } = require('mongoose');
 const Product = require('../models/Product');
+const cloudinaryInstance = require('../configs/cloudinary.config');
 
 /**
  * Get all products in the database
@@ -39,17 +41,23 @@ module.exports.getOne = async (req, res) => {
  * @param {response} res
  */
 module.exports.create = async (req, res) => {
-  const { user_id, name, price, description, category_id, stock, image } = req.body;
-
+  const { user_id, name, price, description, category_id, stock } = req.body;
+  const _id = Types.ObjectId();
   try {
+    const result = await cloudinaryInstance.uploader.upload(req.file.path, {
+      public_id: `${_id}_photo`,
+      folder: 'siternak/products',
+    });
+
     const product = await Product.create({
+      _id,
       _userId: user_id,
       _categoryId: category_id,
       name,
       price,
       description,
       stock,
-      image,
+      image: result.secure_url,
     });
     res.status(201).json({ status: 201, success: true, data: product });
   } catch (err) {
@@ -95,6 +103,32 @@ module.exports.update = async (req, res) => {
 
   try {
     const product = await Product.findByIdAndUpdate(product_id, updatedProduct, { new: true, runValidators: true });
+    res.status(200).json({ status: 200, success: true, data: product });
+  } catch (err) {
+    res.status(500).json({ status: 500, success: false, message: err.message });
+  }
+};
+
+/**
+ * Update image product
+ *
+ * @param {request} req
+ * @param {response} res
+ */
+module.exports.updateImage = async (req, res) => {
+  const product_id = req.params.product_id;
+
+  try {
+    const result = await cloudinaryInstance.uploader.upload(req.file.path, {
+      public_id: `${product_id}_photo`,
+      folder: 'siternak/products',
+    });
+
+    const product = await Product.findByIdAndUpdate(
+      product_id,
+      { image: result.secure_url },
+      { new: true, runValidators: true }
+    );
     res.status(200).json({ status: 200, success: true, data: product });
   } catch (err) {
     res.status(500).json({ status: 500, success: false, message: err.message });
