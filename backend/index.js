@@ -3,6 +3,7 @@
  *---------------------------------------------**/
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 // INITIALIZE EXPRESS
 const app = express();
@@ -17,6 +18,7 @@ if (process.env.NODE_ENV !== 'production') {
 /**--------------------------------------------
  *               MIDDLEWARES
  *---------------------------------------------**/
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
