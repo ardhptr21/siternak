@@ -1,5 +1,5 @@
-import React from 'react'
-import Tabel from '../../../components/Tabel'
+import React from 'react';
+import Tabel from '../../../components/Tabel';
 
 const TabsDashboard = () => {
   const tabs = [
@@ -33,15 +33,15 @@ const TabsDashboard = () => {
       title: 'PEMBATALAN',
       content: 'Content 5',
     },
-  ]
+  ];
 
   return (
     <div>
-      <div className="rounded-lg shadow border __montserat-text border-gray-200 bg-white p-5">
+      <div className="p-5 bg-white border border-gray-200 rounded-lg shadow __montserat-text">
         <div className="mb-11">
-          <div className="flex justify-between items-center border-b-2 border-gray-200 pb-4">
+          <div className="flex items-center justify-between pb-4 border-b-2 border-gray-200">
             <ul
-              className="nav nav-tabs flex flex-col md:flex-row flex-wrap list-none border-b-0 pl-0"
+              className="flex flex-col flex-wrap pl-0 list-none border-b-0 nav nav-tabs md:flex-row"
               id="tabs-tab"
               role="tablist"
             >
@@ -78,11 +78,11 @@ const TabsDashboard = () => {
               ))}
             </ul>
           </div>
-          <div class="flex justify-start">
-            <div class="mb-3 mt-4 xl:w-96">
+          <div className="flex justify-start">
+            <div className="mt-4 mb-3 xl:w-96">
               <input
                 type="search"
-                class="
+                className="
                   form-control
                   block
                   w-full
@@ -111,20 +111,20 @@ const TabsDashboard = () => {
                   window.location.href.split('#')[1] === el.href && (
                     <div
                       key={idx}
-                      className="tab-pane fade show border-blue-600 active"
+                      className="border-blue-600 tab-pane fade show active"
                       id={el.href}
                       role="tabpanel"
                       aria-labelledby={el.id}
                     >
                       {el.content}
                     </div>
-                  ),
+                  )
               )}
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
-export default TabsDashboard
+  );
+};
+export default TabsDashboard;

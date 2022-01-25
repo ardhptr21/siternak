@@ -1,10 +1,19 @@
-import React from "react";
-import Carrousel from "../../components/Carousel";
-import Card from "../../components/Card";
-import Header from "../../components/Header";
-import { staticConst } from "../../static/staticConst";
+import React from 'react';
+import Carrousel from '../../components/Carousel';
+import Card from '../../components/Card';
+import Header from '../../components/Header';
+import { useSelector, useDispatch } from 'react-redux';
+import { setProducts } from '../../actions/products/productsActions';
+import { useEffect } from 'react';
 
 const LandingPage = () => {
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.products);
+
+  useEffect(() => {
+    dispatch(setProducts());
+  }, [dispatch]);
+
   return (
     <div>
       <div className="__carrousel-bg-img pt-9 mb-14">
@@ -13,19 +22,17 @@ const LandingPage = () => {
         </div>
       </div>
       <div className="bg-gray-50 pt-14">
-        <div className="mycontainer mobile:mycontainerfull min-h-screen">
+        <div className="min-h-screen mycontainer mobile:mycontainerfull">
           <Header title="Today's Offer" subTitle="Get the best offer from us" />
           <div
-            className="mt-12 grid justify-between"
+            className="grid justify-between mt-12"
             style={{
-              gridTemplateColumns: "repeat(auto-fit, minmax(12rem, 12rem))",
-              gap: "25px 15px",
+              gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 12rem))',
+              gap: '25px 15px',
             }}
           >
-            {staticConst.stasticCardData.map((el, indx) => (
-              <div key={indx}>
-                <Card data={el} />
-              </div>
+            {products.map((product, index) => (
+              <Card product={product} key={index} />
             ))}
           </div>
         </div>
