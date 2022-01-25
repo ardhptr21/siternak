@@ -1,5 +1,7 @@
 const { request, response } = require('express');
+const { Types } = require('mongoose');
 const Shop = require('../models/Shop');
+const cloudinaryInstance = require('../configs/cloudinary.config');
 
 /**
  * Get All Shops
@@ -45,9 +47,18 @@ module.exports.getOne = async (req, res) => {
  */
 module.exports.create = async (req, res) => {
   const { user_id, name, description } = req.body;
-
+  const _id = Types.ObjectId();
   try {
-    const shop = await Shop.create({ _userId: user_id, name: name, description: description });
+    let result = '';
+    if (req.file) {
+      console.log('is here');
+      result = await cloudinaryInstance.uploader.upload(req.file.path, {
+        public_id: `${_id}_photo`,
+        folder: 'siternak/shops',
+      });
+    }
+
+    const shop = await Shop.create({ _id, _userId: user_id, name, description, image: result?.secure_url ?? '' });
     res.status(201).json({ status: 201, success: true, data: shop });
   } catch (err) {
     res.status(409).json({ status: 409, success: false, message: err.message });
@@ -87,6 +98,32 @@ module.exports.update = async (req, res) => {
 
   try {
     const shop = await Shop.findByIdAndUpdate(id, updatedShop, { new: true, runValidators: true });
+    res.status(200).json({ status: 200, success: true, data: shop });
+  } catch (err) {
+    res.status(409).json({ status: 409, success: false, message: err.message });
+  }
+};
+
+/**
+ * Update shop image
+ *
+ * @param {request} req
+ * @param {response} res
+ */
+module.exports.updateImage = async (req, res) => {
+  const { shop_id } = req.params;
+
+  try {
+    const result = await cloudinaryInstance.uploader.upload(req.file.path, {
+      public_id: `${shop_id}_photo`,
+      folder: 'siternak/shops',
+    });
+
+    const shop = await Shop.findByIdAndUpdate(
+      shop_id,
+      { image: result.secure_url },
+      { new: true, runValidators: true }
+    );
     res.status(200).json({ status: 200, success: true, data: shop });
   } catch (err) {
     res.status(409).json({ status: 409, success: false, message: err.message });

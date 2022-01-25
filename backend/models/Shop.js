@@ -18,6 +18,9 @@ const shopSchema = new mongoose.Schema({
   slug: {
     type: String,
   },
+  image: {
+    type: String,
+  },
 });
 
 shopSchema.post('validate', (doc) => {
