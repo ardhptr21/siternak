@@ -1,5 +1,5 @@
-import { LOGIN, LOGOUT, REGISTER, UPDATE_USER } from './userTypes';
-import { addNewUser, signInUser, updateUserData } from '../../api/userApi';
+import { LOGIN, LOGOUT, REGISTER, UPDATE_USER, UPDATE_USER_PHOTO } from './userTypes';
+import { addNewUser, signInUser, updateUserData, updateUserPhotoData } from '../../api/userApi';
 
 export const loginUser = (username, password) => async (dispatch) => {
   try {
@@ -31,4 +31,12 @@ export const updateUser = (data, userId, token) => async (dispatch) => {
   }
 };
 
+export const updateUserPhoto = (photo, userId, token) => async (dispatch) => {
+  try {
+    const result = await updateUserPhotoData(photo, userId, token);
+    dispatch({ type: UPDATE_USER_PHOTO, payload: result.data.data.photo });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 export const logoutUser = () => ({ type: LOGOUT });

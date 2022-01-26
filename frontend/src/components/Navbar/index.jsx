@@ -75,9 +75,9 @@ const Navbar = () => {
               </div>
               <div>
                 <img
-                  src="/assets/Untitled designrandoongrokgfn354tygregghehwerergerg.png"
+                  src={user.photo || '/assets/Untitled designrandoongrokgfn354tygregghehwerergerg.png'}
                   alt="profile_picture"
-                  className="object-cover w-10 h-10 rounded-full"
+                  className="object-cover w-10 h-10 border rounded-full"
                 />
               </div>
             </>

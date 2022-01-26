@@ -30,3 +30,16 @@ export const updateUserData = async (data, userId, token) => {
     console.log(err.message);
   }
 };
+
+export const updateUserPhotoData = async (photo, userId, token) => {
+  try {
+    return await axiosInstance.patch(`/users/${userId}/photo`, photo, {
+      headers: {
+        Authorization: token,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
