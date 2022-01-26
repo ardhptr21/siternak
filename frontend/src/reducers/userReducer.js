@@ -1,9 +1,9 @@
-import { LOGIN, LOGOUT, REGISTER } from '../actions/user/userTypes';
+import { LOGIN, LOGOUT, REGISTER, UPDATE_USER } from '../actions/user/userTypes';
 
 const initialState = {
   isLoggedIn: false,
   token: '',
-  id: '',
+  _id: '',
   name: '',
   username: '',
   telephone: '',
@@ -31,6 +31,8 @@ const userReducer = (state = initialState, action) => {
       };
     case LOGOUT:
       return initialState;
+    case UPDATE_USER:
+      return { ...state, ...action.payload };
     default:
       return state;
   }
