@@ -2,8 +2,8 @@
  *               REQUIRE MODULE
  *---------------------------------------------**/
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
+const initiateMongoose = require('./configs/mongoose.config');
 
 // INITIALIZE EXPRESS
 const app = express();
@@ -46,12 +46,6 @@ app.get('/', (_, res) => {
 /**--------------------------------------------
  *               CONNECT DB AND LISTENING
  *---------------------------------------------**/
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => {
-    app.listen(PORT, () => console.log(`Server is running on port ${PORT} and connect to database\n`));
-  })
-  .catch((err) => {
-    console.log('Server not running because of error when connected to database');
-    console.log(err);
-  });
+initiateMongoose(() => {
+  app.listen(PORT, console.log(`Server is running on port ${PORT} and connect to database\n`));
+});
