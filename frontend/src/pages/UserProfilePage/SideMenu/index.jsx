@@ -19,8 +19,8 @@ const SideMenu = () => {
         />
         <div>
           <div>
-            <div className="ml-2 text-sm font-semibold">{staticConst.profile_menu.user.name}</div>
-            <div className="ml-2 text-xs text-gray-500">{staticConst.profile_menu.user.role_name}</div>
+            <div className="ml-2 text-sm font-semibold">{user.name}</div>
+            <div className="ml-2 text-xs text-gray-500">{user.email}</div>
           </div>
         </div>
       </div>

@@ -56,6 +56,7 @@ export const createShop = (data, token) => async (dispatch) => {
     const shopResult = await createUserShop(data, token);
     const userResult = await getUser(shopResult.data.data._userId, token);
     dispatch({ type: CREATE_SHOP, payload: userResult.data.data });
+    dispatch(getShopById(userResult.data.data._id));
   } catch (err) {
     console.log(err.message);
   }
