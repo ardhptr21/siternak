@@ -7,13 +7,17 @@ import {
   createUserShop,
   getUser,
 } from '../../api/userApi';
+import { getShopById } from '../../actions/shops/shopActions';
 
 export const loginUser = (username, password) => async (dispatch) => {
   try {
     const result = await signInUser(username, password);
     const data = { ...result.data.data.user, token: result.data.data.token };
     dispatch({ type: LOGIN, payload: data });
-    return result;
+
+    if (result.data.data.user.isSeller && result.data.data.user.role === 0) {
+      dispatch(getShopById(result.data.data.user._id));
+    }
   } catch (err) {
     console.log(err.message);
   }

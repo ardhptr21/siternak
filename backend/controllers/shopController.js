@@ -20,12 +20,33 @@ module.exports.getAll = async (req, res) => {
 };
 
 /**
+ * Get Shop by user id
+ *
+ * @param {*} req
+ * @param {*} res
+ */
+module.exports.getOneByUserId = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const shop = await Shop.findOne({ _userId: Types.ObjectId(userId) });
+
+    if (!shop) {
+      return res.status(404).json({ status: 404, success: false, message: 'Shop not found' });
+    }
+
+    res.status(200).json({ status: 200, success: true, data: shop });
+  } catch (err) {
+    res.status(500).json({ status: 500, success: false, message: err.message });
+  }
+};
+
+/**
  * Get Shop by slug name
  *
  * @param {request} req
  * @param {response} res
  */
-module.exports.getOne = async (req, res) => {
+module.exports.getOneBySlug = async (req, res) => {
   const { slug } = req.params;
   try {
     const shop = await Shop.findOne({ slug: slug });

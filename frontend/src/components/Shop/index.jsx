@@ -1,10 +1,48 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { BsCheckLg, BsPencil } from 'react-icons/bs';
+import ImageDashboard from '../ImageDashboard';
+import DashboardDataContainer from '../DashboardDataContainer';
+import DashboardData from '../DashboardData';
+import { useDispatch, useSelector } from 'react-redux';
+import { shopImageUpdate, updateShop } from '../../actions/shops/shopActions';
 
 const Shop = () => {
+  const shop = useSelector((state) => state.shop);
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const [isEdit, setEdit] = useState(false);
+
+  const defaultShopDataState = useMemo(() => {
+    return {
+      name: shop.name,
+      description: shop.description,
+    };
+  }, [shop]);
+
+  const [shopData, setShopData] = useState(defaultShopDataState);
+
+  useEffect(() => {
+    setShopData(defaultShopDataState);
+  }, [isEdit, defaultShopDataState]);
+
   const handleEditForm = () => {
     setEdit(!isEdit);
+  };
+
+  const handleChange = (e) => {
+    setShopData({ ...shopData, [e.target.name]: e.target.value });
+  };
+
+  const handleUpdateShopData = () => {
+    dispatch(updateShop(shopData, shop._id, user.token));
+    setEdit(false);
+  };
+
+  const handleUpdateShopPhotoData = (e) => {
+    const formData = new FormData();
+    formData.append('image', e.target.files[0]);
+    dispatch(shopImageUpdate(formData, shop._id, user.token));
+    setEdit(false);
   };
 
   return (
@@ -16,17 +54,20 @@ const Shop = () => {
       <div className="flex justify-between pb-16 border-b-8 border-gray-200">
         <div className="flex">
           <div>
-            <img
-              src="/assets/Untitled designrandoongrokgfn354tygregghehwerergerg.png"
-              alt="profile_pict"
-              className="object-cover w-48 h-48 rounded-md"
-            />
-            <div className="mt-5">
+            <div className="w-48">
+              <ImageDashboard
+                isEdit={isEdit}
+                image={shop.image}
+                name="photo"
+                handleChange={handleUpdateShopPhotoData}
+              />
+            </div>
+            <div className="mt-5 space-y-5">
               <button
                 onClick={handleEditForm}
-                className="ml-2 bg-transparent flex justify-between hover:text-textDefault transition hover:border-textDefault items-center text-sm font-medium text-subtitle py-1.5 px-3 border rounded-full"
+                className="ml-2 bg-transparent flex justify-center gap-2 hover:text-white transition hover:bg-textDefault items-center text-sm font-medium text-subtitle py-1.5 px-3 border border-textDefault rounded-full w-full"
               >
-                Edit Profile
+                {isEdit && 'Batal '}Edit Toko
                 <span>
                   <BsPencil className="ml-2 text-sm" />
                 </span>
@@ -34,95 +75,29 @@ const Shop = () => {
             </div>
           </div>
           <div className="ml-12">
-            <div>
-              <div className="font-semibold">Nama Toko</div>
-              {isEdit ? (
-                <input
-                  value={'GENTON SHOP'}
-                  type="search"
-                  className="
-                  form-control
-                  block
-                  w-full
-                  px-3
-                  py-1.5
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  mt-2 mb-5
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
-                "
-                  id="exampleSearch"
-                  placeholder="Pencarian"
-                />
-              ) : (
-                <div className="mt-2 mb-5">GENTON SHOP</div>
-              )}
-            </div>
-            <div>
-              <div className="font-semibold">Deskripsi Gambar</div>
-              {isEdit ? (
-                <div className="flex items-center justify-center w-full mt-2 mb-5 bg-grey-lighter">
-                  <label className="flex flex-col items-center w-64 px-4 py-6 tracking-wide uppercase bg-white border rounded-lg shadow-lg cursor-pointer text-blue border-blue">
-                    <svg className="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                      <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
-                    </svg>
-                    <span className="mt-2 text-base leading-normal">Select a file</span>
-                    <input type="file" className="hidden" />
-                  </label>
-                </div>
-              ) : (
-                <img
-                  src="/assets/Untitled designrandoongrokgfn354tygregghehwerergerg.png"
-                  alt="profile_picture"
-                  className="object-cover w-64 h-32 mt-2 mb-5"
-                />
-              )}
-            </div>
-            <div>
-              <div className="font-semibold">Deskripsi Toko</div>
-              {isEdit ? (
-                <input
-                  value={'GENTON SHOP'}
-                  type="search"
-                  className="
-                  form-control
-                  block
-                  w-full
-                  px-3
-                  py-1.5
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  mt-2 mb-5
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
-                "
-                  id="exampleSearch"
-                  placeholder="Pencarian"
-                />
-              ) : (
-                <div className="mt-2 mb-5">GENTON SHOP</div>
-              )}
-            </div>
+            <DashboardDataContainer title="Info Toko" margin="mt-5">
+              <DashboardData title="Nama" value={shopData.name} isEdit={isEdit} onChange={handleChange} name="name" />
+              <DashboardData
+                title="Deskripsi"
+                value={shopData.description}
+                isEdit={isEdit}
+                onChange={handleChange}
+                name="description"
+                isTextarea={true}
+              />
 
-            {isEdit && (
-              <button className="bg-transparent mt-32 flex justify-between hover:text-textDefault transition hover:border-textDefault items-center text-sm font-medium text-subtitle py-1.5 px-3 border rounded-full">
-                SIMPAN
-                <span>
-                  <BsCheckLg className="ml-2 text-sm" />
-                </span>
-              </button>
-            )}
+              {isEdit && (
+                <button
+                  className="bg-transparent mt-32 flex justify-between hover:text-textDefault transition hover:border-textDefault items-center text-sm font-medium text-subtitle py-1.5 px-3 border rounded-full"
+                  onClick={handleUpdateShopData}
+                >
+                  SIMPAN
+                  <span>
+                    <BsCheckLg className="ml-2 text-sm" />
+                  </span>
+                </button>
+              )}
+            </DashboardDataContainer>
           </div>
         </div>
       </div>

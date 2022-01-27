@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { BsPencil, BsCheckLg } from 'react-icons/bs';
 import { AiOutlineShop } from 'react-icons/ai';
 import { IoMdLogOut } from 'react-icons/io';
-import { FaUserEdit } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { useMemo } from 'react';
@@ -11,6 +10,7 @@ import { logoutUser, updateUserPhoto } from '../../../actions/user/userActions';
 import DashboardData from '../../../components/DashboardData';
 import DashboardDataContainer from '../../../components/DashboardDataContainer';
 import { updateUser } from '../../../actions/user/userActions';
+import ImageDashboard from '../../../components/ImageDashboard';
 
 const UserPage = () => {
   const navigation = useNavigate();
@@ -72,33 +72,7 @@ const UserPage = () => {
       <div className="flex justify-between pb-16 border-b-8 border-gray-200">
         <div className="flex">
           <div>
-            <label htmlFor="photo" className={`relative${isEdit && ' cursor-pointer'}`}>
-              <img
-                src={user.photo || '/assets/Untitled designrandoongrokgfn354tygregghehwerergerg.png'}
-                alt="profile_pict"
-                className="object-cover w-48 h-48 border rounded-md"
-              />
-              {isEdit && (
-                <div className="absolute top-0 left-0 flex items-center justify-center w-48 h-48 bg-black rounded opacity-80">
-                  <FaUserEdit className="w-32 h-32 text-white" />
-                </div>
-              )}
-            </label>
-            {isEdit && (
-              <small className="inline-block w-48 mt-2 text-xs text-gray-400">
-                *Otomatis diperbarui ketika anda memilih foto baru
-              </small>
-            )}
-            {isEdit && (
-              <input
-                type="file"
-                name="photo"
-                className="hidden"
-                id="photo"
-                required
-                onChange={handleUpdateUserPhotoData}
-              />
-            )}
+            <ImageDashboard isEdit={isEdit} image={user.photo} handleChange={handleUpdateUserPhotoData} name="photo" />
             <div className="mt-5 space-y-5">
               <button
                 onClick={handleEditForm}
