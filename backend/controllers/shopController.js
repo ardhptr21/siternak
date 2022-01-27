@@ -1,6 +1,7 @@
 const { request, response } = require('express');
 const { Types } = require('mongoose');
 const Shop = require('../models/Shop');
+const User = require('../models/User');
 const cloudinaryInstance = require('../configs/cloudinary.config');
 
 /**
@@ -49,9 +50,8 @@ module.exports.create = async (req, res) => {
   const { user_id, name, description } = req.body;
   const _id = Types.ObjectId();
   try {
-    let result = '';
+    let result = null;
     if (req.file) {
-      console.log('is here');
       result = await cloudinaryInstance.uploader.upload(req.file.path, {
         public_id: `${_id}_photo`,
         folder: 'siternak/shops',
@@ -59,6 +59,7 @@ module.exports.create = async (req, res) => {
     }
 
     const shop = await Shop.create({ _id, _userId: user_id, name, description, image: result?.secure_url ?? '' });
+    await User.findByIdAndUpdate(user_id, { isSeller: true, role: 0 });
     res.status(201).json({ status: 201, success: true, data: shop });
   } catch (err) {
     res.status(409).json({ status: 409, success: false, message: err.message });

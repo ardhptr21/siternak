@@ -64,6 +64,18 @@ export const staticConst = {
       seller_menu: [
         {
           menu: {
+            title: 'Toko',
+            icon: <RiStore2Line />,
+            subMenu: [
+              { name: 'Profile Toko', path: '/user-profile/bio_seller' },
+              { name: 'Kategori Toko', path: '/user-profile/dashboard_content' },
+              { name: 'Penilaian Toko', path: '/user-profile/dashboard_content' },
+              { name: 'Laporan Saya', path: '/user-profile/dashboard_content' },
+            ],
+          },
+        },
+        {
+          menu: {
             title: 'Transaksi',
             icon: <GrSend />,
             subMenu: [
@@ -104,18 +116,6 @@ export const staticConst = {
             ],
           },
         },
-        {
-          menu: {
-            title: 'Toko',
-            icon: <RiStore2Line />,
-            subMenu: [
-              { name: 'Profile Toko', path: '/user-profile/bio_seller' },
-              { name: 'Kategori Toko', path: '/user-profile/dashboard_content' },
-              { name: 'Penilaian Toko', path: '/user-profile/dashboard_content' },
-              { name: 'Laporan Saya', path: '/user-profile/dashboard_content' },
-            ],
-          },
-        },
       ],
     },
     user: {
@@ -125,7 +125,10 @@ export const staticConst = {
         {
           menu: {
             title: 'Menu',
-            subMenu: [{ name: 'Profile', path: '/user-profile/bio' }],
+            subMenu: [
+              { name: 'Profile', path: '/user-profile/bio' },
+              { name: 'Toko', path: '/user-profile/toko' },
+            ],
           },
         },
         {

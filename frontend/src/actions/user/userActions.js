@@ -1,5 +1,12 @@
-import { LOGIN, LOGOUT, REGISTER, UPDATE_USER, UPDATE_USER_PHOTO } from './userTypes';
-import { addNewUser, signInUser, updateUserData, updateUserPhotoData } from '../../api/userApi';
+import { CREATE_SHOP, LOGIN, LOGOUT, REGISTER, UPDATE_USER, UPDATE_USER_PHOTO } from './userTypes';
+import {
+  addNewUser,
+  signInUser,
+  updateUserData,
+  updateUserPhotoData,
+  createUserShop,
+  getUser,
+} from '../../api/userApi';
 
 export const loginUser = (username, password) => async (dispatch) => {
   try {
@@ -36,7 +43,18 @@ export const updateUserPhoto = (photo, userId, token) => async (dispatch) => {
     const result = await updateUserPhotoData(photo, userId, token);
     dispatch({ type: UPDATE_USER_PHOTO, payload: result.data.data.photo });
   } catch (err) {
+    console.log(err);
+  }
+};
+
+export const createShop = (data, token) => async (dispatch) => {
+  try {
+    const shopResult = await createUserShop(data, token);
+    const userResult = await getUser(shopResult.data.data._userId, token);
+    dispatch({ type: CREATE_SHOP, payload: userResult.data.data });
+  } catch (err) {
     console.log(err.message);
   }
 };
+
 export const logoutUser = () => ({ type: LOGOUT });

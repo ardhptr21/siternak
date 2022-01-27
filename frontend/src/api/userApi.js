@@ -1,5 +1,14 @@
 import axiosInstance from '../axiosInstance';
 
+export const getUser = async (user_id) => {
+  try {
+    const result = await axiosInstance.get(`/users/${user_id}`);
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const addNewUser = async (data) => {
   try {
     return await axiosInstance.post('/users/', data);
@@ -41,5 +50,19 @@ export const updateUserPhotoData = async (photo, userId, token) => {
     });
   } catch (err) {
     console.log(err.message);
+  }
+};
+
+export const createUserShop = async (data, token) => {
+  try {
+    const result = await axiosInstance.post(`/shops`, data, {
+      headers: {
+        Authorization: token,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return result;
+  } catch (err) {
+    console.log(err);
   }
 };

@@ -6,7 +6,7 @@ import { FaUserEdit } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { logoutUser, updateUserPhoto } from '../../../actions/user/userActions';
 import DashboardData from '../../../components/DashboardData';
 import DashboardDataContainer from '../../../components/DashboardDataContainer';
@@ -110,15 +110,23 @@ const UserPage = () => {
                 </span>
               </button>
               {!user.isSeller && (
-                <button
-                  onClick={handleEditForm}
-                  className="ml-2 bg-transparent flex justify-center gap-2 transition items-center text-sm font-medium text-green-400 border-green-400 hover:bg-green-400 border hover:text-white py-1.5 px-3 rounded-full w-full"
+                <Link
+                  className="block"
+                  to={{
+                    pathname: '/user-profile/toko',
+                    search: '?from=user-profile',
+                  }}
                 >
-                  Buka Toko
-                  <span>
-                    <AiOutlineShop className="ml-2 text-sm" />
-                  </span>
-                </button>
+                  <button
+                    onClick={handleEditForm}
+                    className="ml-2 bg-transparent flex justify-center gap-2 transition items-center text-sm font-medium text-green-400 border-green-400 hover:bg-green-400 border hover:text-white py-1.5 px-3 rounded-full w-full"
+                  >
+                    Buka Toko
+                    <span>
+                      <AiOutlineShop className="ml-2 text-sm" />
+                    </span>
+                  </button>
+                </Link>
               )}
               <button
                 className="ml-2 bg-transparent flex justify-center gap-2 hover:bg-red-500 hover:text-white transition items-center text-sm font-medium text-red-500 py-1.5 px-3 border border-red-500 rounded-full w-full"
