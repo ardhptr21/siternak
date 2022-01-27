@@ -1,14 +1,12 @@
-import React from 'react'
+import React from 'react';
 
-const DashboardPages = () => {
+const DashboardPages = ({ children }) => {
   return (
     <div>
-      <div className="rounded-lg shadow border __montserat-text border-gray-200 bg-white p-5">
-        <div className="mb-11">
-          <div>Content</div>
-        </div>
+      <div className="p-5 bg-white border border-gray-200 rounded-lg shadow __montserat-text">
+        <div className="mb-11">{children}</div>
       </div>
     </div>
-  )
-}
-export default DashboardPages
+  );
+};
+export default DashboardPages;

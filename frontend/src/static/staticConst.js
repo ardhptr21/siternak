@@ -64,33 +64,11 @@ export const staticConst = {
       seller_menu: [
         {
           menu: {
-            title: 'Toko',
-            icon: <RiStore2Line />,
-            subMenu: [
-              { name: 'Profile Toko', path: '/user-profile/bio_seller' },
-              { name: 'Kategori Toko', path: '/user-profile/dashboard_content' },
-              { name: 'Penilaian Toko', path: '/user-profile/dashboard_content' },
-              { name: 'Laporan Saya', path: '/user-profile/dashboard_content' },
-            ],
-          },
-        },
-        {
-          menu: {
             title: 'Transaksi',
             icon: <GrSend />,
             subMenu: [
               { name: 'Pengiriman', path: '/user-profile/pengiriman#tabs-all' },
               { name: 'Pesanan', path: '/user-profile/pesanan' },
-            ],
-          },
-        },
-        {
-          menu: {
-            title: 'Produk',
-            icon: <RiFileList2Line />,
-            subMenu: [
-              { name: 'Produk Saya', path: '/user-profile/dashboard_seller' },
-              { name: 'Tambah Produk', path: '/user-profile/dashboard_content' },
             ],
           },
         },

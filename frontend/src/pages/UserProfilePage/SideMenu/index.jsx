@@ -2,6 +2,8 @@ import React from 'react';
 import { staticConst } from '../../../static/staticConst';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
+import SideMenuListContainer from '../../../components/SideMenuListContainer';
+import SideMenuListItem from '../../../components/SideMenuListItem';
 
 const SideMenu = () => {
   const navigate = useNavigate();
@@ -25,21 +27,14 @@ const SideMenu = () => {
         </div>
       </div>
       <div className="mt-2">
-        {staticConst.profile_menu.user.user_menu.map((el, index) => (
-          <div key={index}>
-            <div className="px-5 py-2 text-sm font-semibold">
-              <span>{el.menu.icon}</span>
-              {el.menu.title}
-            </div>
-            {el.menu.subMenu.map((elm, idx) => (
-              <div className="py-1 text-sm text-gray-600 cursor-pointer hover:bg-gray-100" key={idx}>
-                <div className="px-7" onClick={() => navigate(elm.path, { replace: true })}>
-                  {elm.name}
-                </div>
-              </div>
-            ))}
-          </div>
-        ))}
+        <SideMenuListContainer title="Menu">
+          <SideMenuListItem path="/user-profile/bio" name="Profile" />
+          <SideMenuListItem path="/user-profile/toko" name="Toko" />
+        </SideMenuListContainer>
+        <SideMenuListContainer title="Produk">
+          <SideMenuListItem path="/user-profile/produk" name="Produk Saya" />
+          <SideMenuListItem path="/user-profile/tambah-produk" name="Tambah Produk" />
+        </SideMenuListContainer>
         {staticConst.profile_menu.seller.seller_menu.map((el, index) => (
           <div key={index}>
             <div className="flex items-center px-5 py-2 text-sm font-semibold">

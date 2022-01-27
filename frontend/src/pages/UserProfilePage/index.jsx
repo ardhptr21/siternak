@@ -6,6 +6,7 @@ import TabsDashboard from './TabsDashboard';
 import StorePage from './StorePage';
 import DashboarSeller from './DashboardSeller';
 import DashboardPages from './DashboardPages';
+import DashboardCreateProduct from './DashboardCreateProduct';
 
 // status 1 = user biasa, selain itu seller
 
@@ -23,6 +24,7 @@ const UserProfile = () => {
         </div>
         {type === 'bio' && <UserPage />}
         {type === 'toko' && <StorePage />}
+        {type === 'tambah-produk' && <DashboardCreateProduct />}
         {type === 'pengiriman' && <TabsDashboard />}
         {type === 'dashboard_seller' && <DashboarSeller />}
         {type === 'pesanan' && <TransactionList />}
