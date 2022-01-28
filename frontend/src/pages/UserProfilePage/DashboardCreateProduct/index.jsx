@@ -2,10 +2,20 @@ import { useState } from 'react';
 import { FiPackage } from 'react-icons/fi';
 import DashboardPages from '../DashboardPages';
 import { BsImages } from 'react-icons/bs';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getAllCategories } from '../../../actions/categories/categoriesActions';
 
 const DashboardCreateProduct = () => {
   const [imagePreview, setImagePreview] = useState(null);
+  const categories = useSelector((state) => state.categories);
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(getAllCategories());
+  }, [dispatch]);
+
+  console.log(categories);
   return (
     <DashboardPages>
       <form className="mx-auto w-450">
@@ -62,6 +72,15 @@ const DashboardCreateProduct = () => {
               required
             />
           </div>
+        </div>
+
+        <div className="grid grid-cols-1 mt-5 mx-7">
+          <label className="text-xs font-semibold text-gray-500 md:text-sm text-light">Kategori Produk</label>
+          <select className="px-3 py-2 mt-1 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent">
+            {categories.map((category) => (
+              <option value={category._id}>{category.name}</option>
+            ))}
+          </select>
         </div>
 
         <div className="grid grid-cols-1 mt-5 mx-7">
