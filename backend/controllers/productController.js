@@ -41,7 +41,7 @@ module.exports.getOne = async (req, res) => {
  * @param {response} res
  */
 module.exports.create = async (req, res) => {
-  const { user_id, name, price, description, category_id, stock } = req.body;
+  const { shop_id, name, price, description, category_id, stock } = req.body;
   const _id = Types.ObjectId();
   try {
     const result = await cloudinaryInstance.uploader.upload(req.file.path, {
@@ -51,7 +51,7 @@ module.exports.create = async (req, res) => {
 
     const product = await Product.create({
       _id,
-      _userId: user_id,
+      _shopId: shop_id,
       _categoryId: category_id,
       name,
       price,

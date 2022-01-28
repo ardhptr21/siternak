@@ -3,7 +3,7 @@ const { nanoid } = require('nanoid');
 
 const productSchema = new mongoose.Schema(
   {
-    _userId: {
+    _shopId: {
       type: mongoose.Types.ObjectId,
       required: [true, "User ID can't be empty"],
     },
