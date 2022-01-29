@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
-import { staticConst } from '../../static/staticConst';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import { BsWhatsapp, BsPinMap } from 'react-icons/bs';
-import { GrMoney } from 'react-icons/gr';
-import Dropdown from '../../components/Dropdown';
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from 'react-icons/ai';
 import { TiShoppingCart } from 'react-icons/ti';
 import CardSlider from '../../components/CardSlider';
 import { useSelector } from 'react-redux';
 import { shopByShopId } from '../../api/shopsApi';
+import { getUser } from '../../api/userApi';
 import { useCallback } from 'react';
 
 const DetailProduct = () => {
@@ -17,24 +15,53 @@ const DetailProduct = () => {
   const products = useSelector((state) => state.products);
   const { slug } = useParams();
   const [shop, setShop] = useState(null);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [productData, setProductData] = useState(null);
   const [descCollapse, setDescCollapse] = useState(true);
   const [qty, setQty] = useState(1);
 
-  const getShop = useCallback(
-    async (data) => {
-      const result = await shopByShopId(data?._shopId);
-      setShop(result.data.data);
+  const getShopData = useCallback(async (shop_id) => {
+    try {
+      const result = await shopByShopId(shop_id);
+      return result.data.data;
+    } catch (err) {
+      throw err;
+    }
+  }, []);
+
+  const getUserData = useCallback(async (user_id) => {
+    try {
+      const result = await getUser(user_id);
+      return result.data.data;
+    } catch (err) {
+      throw err;
+    }
+  }, []);
+
+  const getDouble = useCallback(
+    async (shop_id) => {
+      try {
+        const shop = await getShopData(shop_id);
+        const user = await getUserData(shop._userId);
+        setShop(shop);
+        setUser(user);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
     },
-    [setShop]
+    [getShopData, getUserData]
   );
 
   useEffect(() => {
     const data = products.find((product) => product.slug === slug);
+    getDouble(data._shopId);
     setProductData(data);
-    getShop(data);
-  }, [slug, products, getShop]);
+  }, [slug, products, getDouble]);
 
+  if (loading) return 'Loading...';
   return (
     <div className="text-gray-700 __montserat-text mycontainer-sm mobile:mycontainerfull">
       {productData && (
@@ -98,18 +125,9 @@ const DetailProduct = () => {
               <div className="mt-3">
                 <div className="text-sm font-semibold">Pengiriman :</div>
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="flex items-center mt-2 text-sm">
-                      <BsPinMap className="mr-2" /> Dikirim dari Surabaya
-                    </p>
-                    <p className="flex items-center mt-1 text-sm">
-                      <GrMoney className="mr-2" />
-                      Estimasi Ongkir Reguler 200rb
-                    </p>
-                  </div>
-                  <div className="mt-2">
-                    <Dropdown title="Pengiriman" viewMore={true} dropdownOpts={staticConst.ongkirOpt} />
-                  </div>
+                  <p className="flex items-center mt-2 text-sm">
+                    <BsPinMap className="mr-2" /> Dikirim dari {user.address.city}
+                  </p>
                 </div>
               </div>
             </div>
