@@ -4,9 +4,10 @@ const { isAuth } = require('../middlewares/authMiddleware');
 const multerInstance = require('../configs/multer.config');
 
 router.patch('/:shop_id/image', isAuth, multerInstance.single('image'), shopController.updateImage);
+router.get('/:id/user', shopController.getOneByUserId);
 router
   .route('/:id')
-  .get(shopController.getOneByUserId)
+  .get(shopController.getOneByShopId)
   .put(isAuth, shopController.update)
   .delete(isAuth, shopController.delete);
 router.get('/:slug', shopController.getOneBySlug);

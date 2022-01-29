@@ -23,7 +23,7 @@ const routeList = [
   },
   {
     name: 'Detail Page',
-    path: '/detail_product/:id',
+    path: '/detail-product/:slug',
     exact: true,
     component: <DetailProduct />,
     permission: false,

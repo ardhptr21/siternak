@@ -1,17 +1,11 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Card = ({ product }) => {
-  const navigate = useNavigate();
-
-  const handleToDetailPage = () => {
-    navigate('/detail_product/12', { replace: true });
-  };
-
   return (
-    <div
+    <Link
+      to={`/detail-product/${product?.slug}`}
       className="w-48 bg-white shadow-lg cursor-pointer h-80 rounded-xl __montserat-text"
-      onClick={handleToDetailPage}
     >
       <img
         src={product?.image || '/assets/luke-stackpoole-RxHhxWnXmNs-unsplash.jpg'}
@@ -33,7 +27,7 @@ const Card = ({ product }) => {
           Rp {Intl.NumberFormat('en-US').format(product?.discount || product?.price)}
         </p>
       </div>
-    </div>
+    </Link>
   );
 };
 

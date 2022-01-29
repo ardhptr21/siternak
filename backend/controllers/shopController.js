@@ -41,6 +41,29 @@ module.exports.getOneByUserId = async (req, res) => {
 };
 
 /**
+ * Get shop by shop id
+ *
+ * @param {request} req
+ * @param {response} res
+ * @returns
+ */
+module.exports.getOneByShopId = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const shop = await Shop.findById(id);
+
+    if (!shop) {
+      return res.status(404).json({ status: 404, success: false, message: 'Shop not found' });
+    }
+
+    res.status(200).json({ status: 200, success: true, data: shop });
+  } catch (err) {
+    res.status(500).json({ status: 500, success: false, message: err.message });
+  }
+};
+
+/**
  * Get Shop by slug name
  *
  * @param {request} req

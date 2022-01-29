@@ -72,7 +72,14 @@ const UserPage = () => {
       <div className="flex justify-between pb-16 border-b-8 border-gray-200">
         <div className="flex">
           <div>
-            <ImageDashboard isEdit={isEdit} image={user.photo} handleChange={handleUpdateUserPhotoData} name="photo" />
+            <div className="w-48">
+              <ImageDashboard
+                isEdit={isEdit}
+                image={user.photo}
+                handleChange={handleUpdateUserPhotoData}
+                name="photo"
+              />
+            </div>
             <div className="mt-5 space-y-5">
               <button
                 onClick={handleEditForm}

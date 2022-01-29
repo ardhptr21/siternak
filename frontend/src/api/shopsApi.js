@@ -15,7 +15,16 @@ export const updateShopData = async (data, shop_id, token) => {
 
 export const shopById = async (user_id) => {
   try {
-    const result = await axiosInstance.get(`/shops/${user_id}`);
+    const result = await axiosInstance.get(`/shops/${user_id}/user`);
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const shopByShopId = async (shop_id) => {
+  try {
+    const result = await axiosInstance.get(`/shops/${shop_id}`);
     return result;
   } catch (err) {
     console.log(err);

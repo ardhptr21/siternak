@@ -17,7 +17,7 @@ const DashboardCreateProduct = () => {
   const [imagePreview, setImagePreview] = useState(null);
 
   const initialProductDataState = {
-    category_id: '',
+    category_id: categories[0]?._id,
     name: '',
     description: '',
     price: 0,
@@ -132,6 +132,7 @@ const DashboardCreateProduct = () => {
             className="px-3 py-2 mt-1 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"
             onChange={handleChange}
             name="category_id"
+            value={productData.category_id}
           >
             {categories.map((category, index) => (
               <option value={category._id} key={index}>
