@@ -76,6 +76,9 @@ module.exports.delete = async (req, res) => {
 
   try {
     await Product.findByIdAndDelete(product_id);
+    await cloudinaryInstance.uploader.destroy(`${product_id}_photo`, {
+      folder: 'siternak/products',
+    });
     res.status(200).json({ status: 200, success: true, message: 'Product deleted' });
   } catch (err) {
     res.status(500).json({ status: 500, success: false, message: err.message });

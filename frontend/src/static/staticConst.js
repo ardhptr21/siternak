@@ -1,6 +1,5 @@
 import { GiSheep, GiCow, GiChicken } from 'react-icons/gi';
 import { GrSend, GrCreditCard } from 'react-icons/gr';
-import { RiFileList2Line, RiStore2Line } from 'react-icons/ri';
 import { HiOutlineTag } from 'react-icons/hi';
 
 export const staticConst = {

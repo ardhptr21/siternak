@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { BsTrash } from 'react-icons/bs';
 import { FaEdit } from 'react-icons/fa';
 
-const Card = ({ product, isAdmin = false }) => {
+const Card = ({ product, isAdmin = false, onDeleteEvent = () => {} }) => {
   return (
     <div className="flex flex-col items-center justify-center w-min">
       <Link
@@ -35,10 +35,8 @@ const Card = ({ product, isAdmin = false }) => {
       </Link>
       {isAdmin && (
         <div className="flex items-center w-full py-2 mt-5 border-2 rounded-lg justify-evenly">
-          <FaEdit className="text-yellow-500" />
-          <Link to="/user-profile/tambah-produk" className="pointer-events-none">
-            <BsTrash className="text-red-500" />
-          </Link>
+          <FaEdit className="text-yellow-500 cursor-pointer" />
+          <BsTrash className="text-red-500 cursor-pointer" onClick={onDeleteEvent} />
         </div>
       )}
     </div>

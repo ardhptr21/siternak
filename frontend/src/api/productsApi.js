@@ -22,3 +22,15 @@ export const createProduct = async (data, token) => {
     console.log(err);
   }
 };
+
+export const removeProduct = async (product_id, token) => {
+  try {
+    await axiosInstance.delete(`/products/${product_id}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
