@@ -8,7 +8,6 @@ const CardSlider = ({ category_id, product_id }) => {
 
   useEffect(() => {
     const data = products.filter((product) => product._categoryId === category_id && product._id !== product_id);
-    console.log(data);
     setProductsData(data);
   }, [products, category_id, product_id]);
 

@@ -1,28 +1,32 @@
 import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FiPackage } from 'react-icons/fi';
 import DashboardPages from '../DashboardPages';
 import { BsImages } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getAllCategories } from '../../../actions/categories/categoriesActions';
-import { addProduct } from '../../../actions/products/productsActions';
+import { addProduct, updateProduct } from '../../../actions/products/productsActions';
 
 const DashboardCreateProduct = () => {
   const categories = useSelector((state) => state.categories);
   const shop = useSelector((state) => state.shop);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const navigation = useNavigate();
+  const product = useLocation()?.state?.product;
 
   const [imageData, setImageData] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
 
   const initialProductDataState = {
-    category_id: categories[0]?._id,
-    name: '',
-    description: '',
-    price: 0,
-    stock: 0,
+    category_id: product?._categoryId || categories[0]?._id,
+    name: product?.name || '',
+    description: product?.description || '',
+    price: product?.price || 0,
+    stock: product?.stock || 0,
   };
+
   const [productData, setProductData] = useState(initialProductDataState);
 
   const handleChange = (e) => {
@@ -42,16 +46,25 @@ const DashboardCreateProduct = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const formData = new FormData();
-    formData.append('image', imageData);
+    imageData && formData.append('image', imageData);
     Object.keys(productData).forEach((key) => {
       formData.append(key, productData[key]);
     });
-    formData.append('shop_id', shop._id);
 
-    dispatch(addProduct(formData, user.token));
-    setProductData(initialProductDataState);
+    if (!Object.keys(product).length === 0) {
+      formData.append('shop_id', shop._id);
+      dispatch(addProduct(formData, user.token));
+    } else {
+      dispatch(updateProduct(product._id, formData, user.token));
+    }
+
+    setImageData(null);
+    setImagePreview(null);
+    navigation('/user-profile/produk', { replace: true });
+  };
+
+  const cancelImage = () => {
     setImageData(null);
     setImagePreview(null);
   };
@@ -71,7 +84,7 @@ const DashboardCreateProduct = () => {
 
         <div className="flex justify-center">
           <div className="flex">
-            <h1 className="text-xl font-bold text-gray-600 md:text-2xl">Tambah Produk</h1>
+            <h1 className="text-xl font-bold text-gray-600 md:text-2xl">{product ? 'Perbarui' : 'Tambah'} Produk</h1>
           </div>
         </div>
 
@@ -83,7 +96,6 @@ const DashboardCreateProduct = () => {
             name="name"
             value={productData.name}
             onChange={handleChange}
-            required
           />
         </div>
 
@@ -96,7 +108,6 @@ const DashboardCreateProduct = () => {
             name="description"
             value={productData.description}
             onChange={handleChange}
-            required
           />
         </div>
 
@@ -109,7 +120,6 @@ const DashboardCreateProduct = () => {
               name="price"
               value={productData.price}
               onChange={handleChange}
-              required
             />
           </div>
 
@@ -121,7 +131,6 @@ const DashboardCreateProduct = () => {
               name="stock"
               value={productData.stock}
               onChange={handleChange}
-              required
             />
           </div>
         </div>
@@ -132,7 +141,7 @@ const DashboardCreateProduct = () => {
             className="px-3 py-2 mt-1 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"
             onChange={handleChange}
             name="category_id"
-            value={productData.category_id}
+            defaultValue={productData.category_id}
           >
             {categories.map((category, index) => (
               <option value={category._id} key={index}>
@@ -152,14 +161,19 @@ const DashboardCreateProduct = () => {
                   pilih foto
                 </p>
               </div>
-              <input type="file" onChange={handleImageDataChange} className="hidden" required />
+              <input type="file" onChange={handleImageDataChange} className="hidden" />
             </label>
           </div>
         </div>
 
-        {imagePreview && (
+        {(imagePreview || product?.image) && (
           <div className="mt-5 mx-7">
-            <img src={imagePreview} className="w-full p-2 border-2 border-black" alt="preview" />
+            <img src={imagePreview || product?.image} className="w-full p-2 border-2 border-black" alt="preview" />
+            {product && imagePreview && (
+              <button className="bg-subtitle mt-2 rounded px-3 py-1 text-white text-sm" onClick={cancelImage}>
+                Batal
+              </button>
+            )}
           </div>
         )}
 
@@ -168,7 +182,7 @@ const DashboardCreateProduct = () => {
             className="w-full px-4 py-2 font-medium text-white bg-green-500 rounded-lg shadow-xl hover:bg-green-700"
             type="submit"
           >
-            Tambah
+            {product ? 'Perbarui' : 'Tambah'}
           </button>
         </div>
       </form>

@@ -26,8 +26,6 @@ const ProductPage = () => {
     if (!filterDefault.includes(name === 'lowerPrice' ? 'Lower Price' : 'Higher Price')) {
       setFilterDefault((old) => [...old, name === 'lowerPrice' ? 'Lower Price' : 'Higher Price']);
     }
-
-    console.log(e.target.value);
   };
 
   const handleRadioChange = (e, name) => {
@@ -37,10 +35,7 @@ const ProductPage = () => {
     if (!filterDefault.includes(name)) {
       setFilterDefault((old) => [...old, name]);
     }
-    console.log(e.target.id);
   };
-
-  console.log(products);
 
   return (
     <div className="mt-3">

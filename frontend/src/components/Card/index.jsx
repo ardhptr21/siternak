@@ -35,7 +35,9 @@ const Card = ({ product, isAdmin = false, onDeleteEvent = () => {} }) => {
       </Link>
       {isAdmin && (
         <div className="flex items-center w-full py-2 mt-5 border-2 rounded-lg justify-evenly">
-          <FaEdit className="text-yellow-500 cursor-pointer" />
+          <Link to="/user-profile/tambah-produk" state={{ product }}>
+            <FaEdit className="text-yellow-500 cursor-pointer" />
+          </Link>
           <BsTrash className="text-red-500 cursor-pointer" onClick={onDeleteEvent} />
         </div>
       )}

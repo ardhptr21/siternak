@@ -93,7 +93,7 @@ module.exports.delete = async (req, res) => {
  */
 module.exports.update = async (req, res) => {
   const product_id = req.params.product_id;
-  const { name, price, category_id, description, stock, image } = req.body;
+  const { name, price, category_id, description, stock } = req.body;
 
   const updatedProduct = {};
 
@@ -102,9 +102,16 @@ module.exports.update = async (req, res) => {
   if (category_id) updatedProduct._categoryId = category_id;
   if (description) updatedProduct.description = description;
   if (stock) updatedProduct.stock = stock;
-  if (image) updatedProduct.image = image;
 
   try {
+    if (req.file) {
+      const result = await cloudinaryInstance.uploader.upload(req.file.path, {
+        public_id: `${product_id}_photo`,
+        folder: 'siternak/products',
+      });
+      updatedProduct.image = result.secure_url;
+    }
+
     const product = await Product.findByIdAndUpdate(product_id, updatedProduct, { new: true, runValidators: true });
     res.status(200).json({ status: 200, success: true, data: product });
   } catch (err) {

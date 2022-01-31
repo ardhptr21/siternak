@@ -34,3 +34,17 @@ export const removeProduct = async (product_id, token) => {
     console.log(err);
   }
 };
+
+export const editProduct = async (product_id, data, token) => {
+  try {
+    const result = await axiosInstance.put(`/products/${product_id}`, data, {
+      headers: {
+        Authorization: token,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+};

@@ -29,7 +29,6 @@ const Navbar = () => {
     if (pathname !== '/product_page') {
       navigation('/product_page');
     }
-    console.log(e.target.value);
   };
 
   return (
