@@ -12,21 +12,18 @@ const routeList = [
     path: '/',
     exact: true,
     component: <LandingPage />,
-    permission: false,
   },
   {
     name: 'Product Page',
     path: '/product_page',
     exact: true,
     component: <ProductPage />,
-    permission: false,
   },
   {
     name: 'Detail Page',
     path: '/detail-product/:slug',
     exact: true,
     component: <DetailProduct />,
-    permission: false,
   },
   {
     name: 'Cart Page',
@@ -37,7 +34,6 @@ const routeList = [
         <Cart />
       </Auth>
     ),
-    permission: true,
   },
   {
     name: 'Checkout Page',
@@ -48,7 +44,6 @@ const routeList = [
         <Checkout />
       </Auth>
     ),
-    permission: true,
   },
   {
     name: 'Dashboard User',
@@ -59,7 +54,6 @@ const routeList = [
         <UserProfile />
       </Auth>
     ),
-    permission: true,
   },
 ];
 

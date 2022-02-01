@@ -2,17 +2,10 @@ import React from 'react';
 import Carrousel from '../../components/Carousel';
 import Card from '../../components/Card';
 import Header from '../../components/Header';
-import { useSelector, useDispatch } from 'react-redux';
-import { setProducts } from '../../actions/products/productsActions';
-import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 const LandingPage = () => {
-  const dispatch = useDispatch();
   const products = useSelector((state) => state.products);
-
-  useEffect(() => {
-    dispatch(setProducts());
-  }, [dispatch]);
 
   return (
     <div>

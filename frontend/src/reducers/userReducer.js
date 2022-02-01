@@ -1,4 +1,12 @@
-import { LOGIN, LOGOUT, REGISTER, UPDATE_USER, UPDATE_USER_PHOTO, CREATE_SHOP } from '../actions/user/userTypes';
+import {
+  LOGIN,
+  LOGOUT,
+  REGISTER,
+  UPDATE_USER,
+  UPDATE_USER_PHOTO,
+  CREATE_SHOP,
+  GET_USER,
+} from '../actions/user/userTypes';
 
 const initialState = {
   isLoggedIn: false,
@@ -23,6 +31,7 @@ const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case REGISTER:
       return state;
+    case GET_USER:
     case LOGIN:
       return {
         ...state,

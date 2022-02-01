@@ -1,4 +1,6 @@
-import { CREATE_SHOP, LOGIN, LOGOUT, REGISTER, UPDATE_USER, UPDATE_USER_PHOTO } from './userTypes';
+import { CREATE_SHOP, LOGIN, LOGOUT, REGISTER, UPDATE_USER, UPDATE_USER_PHOTO, GET_USER } from './userTypes';
+import { removeUserStorage, setUserStorage } from '../../storage/userStorage';
+
 import {
   addNewUser,
   signInUser,
@@ -15,7 +17,9 @@ export const loginUser = (username, password) => async (dispatch) => {
     const data = { ...result.data.data.user, token: result.data.data.token };
     dispatch({ type: LOGIN, payload: data });
 
-    if (result.data.data.user.isSeller && result.data.data.user.role === 0) {
+    setUserStorage(data._id, data.token);
+
+    if (data.isSeller && data.role === 0) {
       dispatch(getShopById(result.data.data.user._id));
     }
   } catch (err) {
@@ -62,4 +66,19 @@ export const createShop = (data, token) => async (dispatch) => {
   }
 };
 
-export const logoutUser = () => ({ type: LOGOUT });
+export const getOneUser = (user_id, token) => async (dispatch) => {
+  try {
+    const result = await getUser(user_id);
+    dispatch({ type: GET_USER, payload: { ...result.data.data, token } });
+    if (result.data.data.isSeller && result.data.data.role === 0) {
+      dispatch(getShopById(result.data.data._id));
+    }
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+export const logoutUser = () => {
+  removeUserStorage();
+  return { type: LOGOUT };
+};
