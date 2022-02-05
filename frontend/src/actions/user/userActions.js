@@ -9,7 +9,8 @@ import {
   createUserShop,
   getUser,
 } from '../../api/userApi';
-import { getShopById } from '../../actions/shops/shopActions';
+import { getShopById } from '../shops/shopActions';
+import { getCartList } from '../cart/cartActions';
 
 export const loginUser = (username, password) => async (dispatch) => {
   try {
@@ -70,6 +71,7 @@ export const getOneUser = (user_id, token) => async (dispatch) => {
   try {
     const result = await getUser(user_id);
     dispatch({ type: GET_USER, payload: { ...result.data.data, token } });
+    dispatch(getCartList(result.data.data._id, token));
     if (result.data.data.isSeller && result.data.data.role === 0) {
       dispatch(getShopById(result.data.data._id));
     }

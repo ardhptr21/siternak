@@ -10,10 +10,10 @@ module.exports.getByUserId = async (req, res) => {
   const _userId = req.params.user_id;
 
   try {
-    const cart = await Cart.findOne({ _userId });
+    let cart = await Cart.findOne({ _userId });
 
     if (!cart) {
-      return res.status(404).json({ status: 404, success: false, message: 'Cart not found' });
+      cart = [];
     }
 
     res.status(200).json({ status: 200, success: true, data: cart });

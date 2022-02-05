@@ -1,9 +1,9 @@
 import { GET_CART, ADD_TO_CART, REMOVE_FROM_CART, UPDATE_CART } from './cartTypes';
 import { addCartItem, getCart, removeCartItem, updateCartItem } from '../../api/cartApi';
 
-export const getCartList = (user_id) => async (dispatch) => {
+export const getCartList = (user_id, token) => async (dispatch) => {
   try {
-    const result = await getCart(user_id);
+    const result = await getCart(user_id, token);
     dispatch({
       type: GET_CART,
       payload: result.data.data.carts,
@@ -13,9 +13,9 @@ export const getCartList = (user_id) => async (dispatch) => {
   }
 };
 
-export const addToCart = (user_id, product_id, quantity) => async (dispatch) => {
+export const addToCart = (user_id, data, token) => async (dispatch) => {
   try {
-    const result = await addCartItem(user_id, product_id, quantity);
+    const result = await addCartItem(user_id, data, token);
     dispatch({
       type: ADD_TO_CART,
       payload: result.data.data.carts,
@@ -25,9 +25,9 @@ export const addToCart = (user_id, product_id, quantity) => async (dispatch) => 
   }
 };
 
-export const removeFromCart = (user_id, product_id) => async (dispatch) => {
+export const removeFromCart = (user_id, product_id, token) => async (dispatch) => {
   try {
-    const result = await removeCartItem(user_id, product_id);
+    const result = await removeCartItem(user_id, product_id, token);
     dispatch({
       type: REMOVE_FROM_CART,
       payload: result.data.data.carts,
@@ -37,9 +37,9 @@ export const removeFromCart = (user_id, product_id) => async (dispatch) => {
   }
 };
 
-export const updateCart = (user_id, product_id, quantity) => async (dispatch) => {
+export const updateCart = (user_id, data, token) => async (dispatch) => {
   try {
-    const result = await updateCartItem(user_id, product_id, quantity);
+    const result = await updateCartItem(user_id, data, token);
     dispatch({
       type: UPDATE_CART,
       payload: result.data.data.carts,
