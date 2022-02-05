@@ -63,15 +63,12 @@ const Navbar = () => {
                   <CgProfile className="text-xl" />
                 </div>
               </Link>
-              <div
-                className="relative inline-block cursor-pointer"
-                onClick={() => navigation('my-cart', { replace: true })}
-              >
+              <Link className="relative inline-block cursor-pointer" to="/my-cart">
                 <RiShoppingCartLine className="mr-4 text-xl text-gray-700" />
                 <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform -translate-y-1/2 bg-red-600 rounded-full translate-x-1/4">
-                  1
+                  0
                 </span>
-              </div>
+              </Link>
               <div>
                 <img
                   src={user.photo || '/assets/Untitled designrandoongrokgfn354tygregghehwerergerg.png'}
