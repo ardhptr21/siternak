@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { shopByShopId } from '../../api/shopsApi';
-import { removeFromCart } from '../../actions/cart/cartActions';
+import { removeFromCart, updateCart } from '../../actions/cart/cartActions';
 
 const CardItemShop = ({ data }) => {
   const [qtyItem, setQtyItem] = useState(data?.quantity || 1);
@@ -24,6 +24,10 @@ const CardItemShop = ({ data }) => {
   const handleCancel = () => {
     setIsEdit(false);
     setQtyItem(data?.quantity || 1);
+  };
+
+  const handleUpdate = () => {
+    dispatch(updateCart(user._id, { product_id: product._id, quantity: qtyItem }, user.token));
   };
 
   const handleDelete = () => {
@@ -96,7 +100,9 @@ const CardItemShop = ({ data }) => {
               <button className="px-4 py-2 mt-6 text-red-500 border border-red-500 rounded-md" onClick={handleCancel}>
                 Batal
               </button>
-              <button className="px-4 py-2 mt-6 text-white bg-green-500 rounded-md">Simpan Perubahan</button>
+              <button className="px-4 py-2 mt-6 text-white bg-green-500 rounded-md" onClick={handleUpdate}>
+                Simpan Perubahan
+              </button>
             </>
           ) : (
             <>
