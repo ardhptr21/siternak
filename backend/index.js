@@ -31,6 +31,7 @@ const authRoutes = require('./routes/auth.routes');
 const categoryRoutes = require('./routes/category.routes');
 const shopRoutes = require('./routes/shop.routes');
 const transactionRoutes = require('./routes/transaction.routes');
+const cartRoutes = require('./routes/cart.routes');
 
 app.use('/users', userRoutes);
 app.use('/products', productRoutes);
@@ -38,6 +39,7 @@ app.use('/categories', categoryRoutes);
 app.use('/transaction', transactionRoutes);
 app.use('/shops', shopRoutes);
 app.use('/auth', authRoutes);
+app.use('/cart', cartRoutes);
 
 app.get('/', (_, res) => {
   res.send('Hello World, Welcome to Siternak API');

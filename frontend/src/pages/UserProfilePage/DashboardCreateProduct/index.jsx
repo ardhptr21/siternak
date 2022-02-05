@@ -52,7 +52,7 @@ const DashboardCreateProduct = () => {
       formData.append(key, productData[key]);
     });
 
-    if (!Object.keys(product).length === 0) {
+    if (!product) {
       formData.append('shop_id', shop._id);
       dispatch(addProduct(formData, user.token));
     } else {
@@ -170,7 +170,7 @@ const DashboardCreateProduct = () => {
           <div className="mt-5 mx-7">
             <img src={imagePreview || product?.image} className="w-full p-2 border-2 border-black" alt="preview" />
             {product && imagePreview && (
-              <button className="bg-subtitle mt-2 rounded px-3 py-1 text-white text-sm" onClick={cancelImage}>
+              <button className="px-3 py-1 mt-2 text-sm text-white rounded bg-subtitle" onClick={cancelImage}>
                 Batal
               </button>
             )}
