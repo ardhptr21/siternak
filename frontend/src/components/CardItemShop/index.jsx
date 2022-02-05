@@ -5,6 +5,8 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { shopByShopId } from '../../api/shopsApi';
 import { removeFromCart, updateCart } from '../../actions/cart/cartActions';
+import { addTransaction } from '../../actions/transaction/transactionActions';
+import { useNavigate } from 'react-router-dom';
 
 const CardItemShop = ({ data, isInTransaction }) => {
   const [qtyItem, setQtyItem] = useState(data?.quantity || 1);
@@ -14,6 +16,7 @@ const CardItemShop = ({ data, isInTransaction }) => {
   const products = useSelector((state) => state.products);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const navigation = useNavigate();
 
   useEffect(() => {
     const productSelected = products.find((item) => item._id === data._productId);
@@ -34,6 +37,25 @@ const CardItemShop = ({ data, isInTransaction }) => {
     const isDelete = window.confirm('Apakah anda yakin ingin menghapus item ini?');
     if (!isDelete) return false;
     dispatch(removeFromCart(user._id, product._id, user.token));
+  };
+
+  const handleCheckout = () => {
+    const isCheckout = window.confirm('Apakah anda yakin ingin melakukan checkout?');
+    if (!isCheckout) return false;
+    dispatch(
+      addTransaction(
+        {
+          product_id: product._id,
+          shop_id: shop._id,
+          buyer_id: user._id,
+          quantity: qtyItem,
+          total_price: product.price * qtyItem,
+        },
+        user.token
+      )
+    );
+    dispatch(removeFromCart(user._id, product._id, user.token));
+    navigation('/user-profile/pesanan', { replace: true });
   };
 
   const getShop = async (shop_id) => {
@@ -111,7 +133,9 @@ const CardItemShop = ({ data, isInTransaction }) => {
                 <button className="px-4 py-2 mt-6 text-red-500 border border-red-500 rounded-md" onClick={handleDelete}>
                   Hapus
                 </button>
-                <button className="px-4 py-2 mt-6 text-white bg-black rounded-md">Checkout</button>
+                <button className="px-4 py-2 mt-6 text-white bg-black rounded-md" onClick={handleCheckout}>
+                  Checkout
+                </button>
               </>
             )}
           </div>
