@@ -26,9 +26,6 @@ export const signInUser = async (email, password) => {
 };
 
 export const updateUserData = async (data, userId, token) => {
-  console.log('DATA', data);
-  console.log('USERID', userId);
-  console.log('TOKEN', token);
   try {
     return await axiosInstance.put(`/users/${userId}`, data, {
       headers: {
