@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router';
+import { Link, useParams } from 'react-router-dom';
 import { BsWhatsapp, BsPinMap } from 'react-icons/bs';
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from 'react-icons/ai';
 import { TiShoppingCart } from 'react-icons/ti';
 import CardSlider from '../../components/CardSlider';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { shopByShopId } from '../../api/shopsApi';
 import { getUser } from '../../api/userApi';
 import { useCallback } from 'react';
+import { addToCart } from '../../actions/cart/cartActions';
 
 const DetailProduct = () => {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const products = useSelector((state) => state.products);
+  const cart = useSelector((state) => state.cart);
+  const userLoggedIn = useSelector((state) => state.user);
   const { slug } = useParams();
   const [shop, setShop] = useState(null);
   const [user, setUser] = useState(null);
@@ -54,6 +56,23 @@ const DetailProduct = () => {
     },
     [getShopData, getUserData]
   );
+
+  const handleAddToCart = () => {
+    dispatch(
+      addToCart(
+        userLoggedIn._id,
+        {
+          product_id: productData._id,
+          quantity: qty,
+        },
+        userLoggedIn.token
+      )
+    );
+  };
+
+  const isInCart = () => {
+    return cart.some((item) => item._productId === productData._id);
+  };
 
   useEffect(() => {
     const data = products.find((product) => product.slug === slug);
@@ -133,49 +152,60 @@ const DetailProduct = () => {
             </div>
             <div>
               <div className="p-4 rounded-md shadow-md">
-                <div className="text-sm font-semibold">Atur Jumlah Dan Catatan :</div>
-                <div
-                  className="flex items-center justify-between px-3 py-1 mt-3 border rounded-md bg-gray-50"
-                  style={{ maxWidth: 100 }}
-                >
-                  <button
-                    className="border-none focus:ring-0 focus:outline-none"
-                    onClick={() => (qty === productData?.quantity ? setQty(qty) : setQty(qty + 1))}
-                  >
-                    <AiOutlinePlusCircle className="text-xl cursor-pointer" />
-                  </button>
-                  <span>{qty}</span>
-                  <button
-                    className="border-none focus:ring-0 focus:outline-none"
-                    onClick={() => (qty === 1 ? setQty(qty) : setQty(qty - 1))}
-                  >
-                    <AiOutlineMinusCircle className="text-xl cursor-pointer" />
-                  </button>
-                </div>
-                <div className="mt-3 rounded-md">
-                  <input
-                    type="text"
-                    placeholder="Tambahkan Catatan"
-                    className="w-full text-sm border-gray-100 rounded-md focus:border-gray-100 focus:ring-0"
-                  />
-                </div>
-                <div className="mt-4">
-                  <div className="text-xs font-medium">Sub Total : </div>
-                  <p className="mt-1 text-base font-semibold">
-                    Rp {Intl.NumberFormat('en-US').format(productData?.price * qty)}
-                  </p>
-                </div>
-                <div className="flex flex-col items-center justify-center mt-3">
-                  <button
-                    onClick={() => navigate('/my-cart')}
-                    className="ml-2 w-full flex justify-between bg-gray-800 hover:text-gray-100 transition hover:border-textDefault items-center text-sm font-medium text-white py-2.5 px-3 border rounded"
-                  >
-                    Masukan Keranjang
-                    <span>
-                      <TiShoppingCart className="ml-4 text-xl" />
-                    </span>
-                  </button>
-                </div>
+                {!isInCart() ? (
+                  <>
+                    <div className="text-sm font-semibold">Atur Jumlah :</div>
+                    <div
+                      className="flex items-center justify-between px-3 py-1 mt-3 border rounded-md bg-gray-50"
+                      style={{ maxWidth: 100 }}
+                    >
+                      <button
+                        className="border-none focus:ring-0 focus:outline-none"
+                        onClick={() => (qty === productData?.quantity ? setQty(qty) : setQty(qty + 1))}
+                      >
+                        <AiOutlinePlusCircle className="text-xl cursor-pointer" />
+                      </button>
+                      <span>{qty}</span>
+                      <button
+                        className="border-none focus:ring-0 focus:outline-none"
+                        onClick={() => (qty === 1 ? setQty(qty) : setQty(qty - 1))}
+                      >
+                        <AiOutlineMinusCircle className="text-xl cursor-pointer" />
+                      </button>
+                    </div>
+                    <div className="mt-4">
+                      <div className="text-xs font-medium">Sub Total : </div>
+                      <p className="mt-1 text-base font-semibold">
+                        Rp {Intl.NumberFormat('en-US').format(productData?.price * qty)}
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-center justify-center mt-3">
+                      <button
+                        className="w-full flex justify-center bg-gray-800 hover:text-gray-100 transition hover:border-textDefault items-center text-sm font-medium text-white py-2.5 px-3 border rounded"
+                        onClick={handleAddToCart}
+                      >
+                        Masukan Keranjang
+                        <span>
+                          <TiShoppingCart className="ml-4 text-xl" />
+                        </span>
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p className="p-3 text-green-500 bg-green-100 rounded">
+                      Product ini sudah anda masukkan ke keranjang
+                    </p>
+                    <Link to="/my-cart">
+                      <button className="w-full flex justify-center bg-gray-800 hover:text-gray-100 transition hover:border-textDefault items-center text-sm font-medium text-white py-2.5 px-3 border rounded mt-3">
+                        Cek Keranjang
+                        <span>
+                          <TiShoppingCart className="ml-4 text-xl" />
+                        </span>
+                      </button>
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>

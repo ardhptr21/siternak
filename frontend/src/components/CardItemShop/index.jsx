@@ -2,15 +2,18 @@ import { BsPencil } from 'react-icons/bs';
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from 'react-icons/ai';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { shopByShopId } from '../../api/shopsApi';
+import { removeFromCart } from '../../actions/cart/cartActions';
 
 const CardItemShop = ({ data }) => {
   const [qtyItem, setQtyItem] = useState(data?.quantity || 1);
   const [isEdit, setIsEdit] = useState(false);
   const [shop, setShop] = useState({});
-  const products = useSelector((state) => state.products);
   const [product, setProduct] = useState({});
+  const products = useSelector((state) => state.products);
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const productSelected = products.find((item) => item._id === data._productId);
@@ -21,6 +24,12 @@ const CardItemShop = ({ data }) => {
   const handleCancel = () => {
     setIsEdit(false);
     setQtyItem(data?.quantity || 1);
+  };
+
+  const handleDelete = () => {
+    const isDelete = window.confirm('Apakah anda yakin ingin menghapus item ini?');
+    if (!isDelete) return false;
+    dispatch(removeFromCart(user._id, product._id, user.token));
   };
 
   const getShop = async (shop_id) => {
@@ -91,7 +100,9 @@ const CardItemShop = ({ data }) => {
             </>
           ) : (
             <>
-              <button className="px-4 py-2 mt-6 text-red-500 border border-red-500 rounded-md">Hapus</button>
+              <button className="px-4 py-2 mt-6 text-red-500 border border-red-500 rounded-md" onClick={handleDelete}>
+                Hapus
+              </button>
               <button className="px-4 py-2 mt-6 text-white bg-black rounded-md">Checkout</button>
             </>
           )}
