@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { shopByShopId } from '../../api/shopsApi';
 import { removeFromCart, updateCart } from '../../actions/cart/cartActions';
 
-const CardItemShop = ({ data }) => {
+const CardItemShop = ({ data, isInTransaction }) => {
   const [qtyItem, setQtyItem] = useState(data?.quantity || 1);
   const [isEdit, setIsEdit] = useState(false);
   const [shop, setShop] = useState({});
@@ -56,7 +56,7 @@ const CardItemShop = ({ data }) => {
           </div>
         </div>
 
-        {!isEdit && (
+        {!isEdit && !isInTransaction && (
           <button
             className="ml-2 bg-transparent flex justify-between hover:text-textDefault transition hover:border-textDefault items-center text-sm font-medium text-subtitle py-1.5 px-3 border rounded-full"
             onClick={() => setIsEdit(true)}
@@ -93,59 +93,62 @@ const CardItemShop = ({ data }) => {
           </div>
         </div>
       </div>
-      <div className="flex justify-between w-full px-8 pb-5">
-        <div className="space-x-5">
-          {isEdit ? (
-            <>
-              <button className="px-4 py-2 mt-6 text-red-500 border border-red-500 rounded-md" onClick={handleCancel}>
-                Batal
+      {isInTransaction && <br className="mt-5" />}
+      {!isInTransaction && (
+        <div className="flex justify-between w-full px-8 pb-5">
+          <div className="space-x-5">
+            {isEdit ? (
+              <>
+                <button className="px-4 py-2 mt-6 text-red-500 border border-red-500 rounded-md" onClick={handleCancel}>
+                  Batal
+                </button>
+                <button className="px-4 py-2 mt-6 text-white bg-green-500 rounded-md" onClick={handleUpdate}>
+                  Simpan Perubahan
+                </button>
+              </>
+            ) : (
+              <>
+                <button className="px-4 py-2 mt-6 text-red-500 border border-red-500 rounded-md" onClick={handleDelete}>
+                  Hapus
+                </button>
+                <button className="px-4 py-2 mt-6 text-white bg-black rounded-md">Checkout</button>
+              </>
+            )}
+          </div>
+          {isEdit && (
+            <div
+              className="flex items-center justify-between w-32 px-3 py-1 mt-3 border rounded-md bg-gray-50"
+              style={{ maxWidth: 100 }}
+            >
+              <button
+                className="border-none focus:ring-0 focus:outline-none"
+                onClick={() => {
+                  if (qtyItem === product?.stock) {
+                    setQtyItem(qtyItem);
+                  } else {
+                    setQtyItem(qtyItem + 1);
+                  }
+                }}
+              >
+                <AiOutlinePlusCircle className="text-xl cursor-pointer" />
               </button>
-              <button className="px-4 py-2 mt-6 text-white bg-green-500 rounded-md" onClick={handleUpdate}>
-                Simpan Perubahan
+              <span>{qtyItem}</span>
+              <button
+                className="border-none focus:ring-0 focus:outline-none"
+                onClick={() => {
+                  if (qtyItem === 1) {
+                    setQtyItem(qtyItem);
+                  } else {
+                    setQtyItem(qtyItem - 1);
+                  }
+                }}
+              >
+                <AiOutlineMinusCircle className="text-xl cursor-pointer" />
               </button>
-            </>
-          ) : (
-            <>
-              <button className="px-4 py-2 mt-6 text-red-500 border border-red-500 rounded-md" onClick={handleDelete}>
-                Hapus
-              </button>
-              <button className="px-4 py-2 mt-6 text-white bg-black rounded-md">Checkout</button>
-            </>
+            </div>
           )}
         </div>
-        {isEdit && (
-          <div
-            className="flex items-center justify-between w-32 px-3 py-1 mt-3 border rounded-md bg-gray-50"
-            style={{ maxWidth: 100 }}
-          >
-            <button
-              className="border-none focus:ring-0 focus:outline-none"
-              onClick={() => {
-                if (qtyItem === product?.stock) {
-                  setQtyItem(qtyItem);
-                } else {
-                  setQtyItem(qtyItem + 1);
-                }
-              }}
-            >
-              <AiOutlinePlusCircle className="text-xl cursor-pointer" />
-            </button>
-            <span>{qtyItem}</span>
-            <button
-              className="border-none focus:ring-0 focus:outline-none"
-              onClick={() => {
-                if (qtyItem === 1) {
-                  setQtyItem(qtyItem);
-                } else {
-                  setQtyItem(qtyItem - 1);
-                }
-              }}
-            >
-              <AiOutlineMinusCircle className="text-xl cursor-pointer" />
-            </button>
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 };
