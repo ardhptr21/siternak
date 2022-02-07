@@ -1,34 +1,34 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
+import parseStatus from '../../../utils/parseStatus';
 import Table from '../../../components/Table';
 import Th from '../../../components/Th';
 import Td from '../../../components/Td';
 import TabsDashboard from '../TabsDashboard';
-import { getTheBuyer } from '../../../actions/transaction/transactionActions';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import parseStatus from '../../../utils/parseStatus';
+import { getTheSeller } from '../../../actions/transaction/transactionActions';
 
-const TransactionList = () => {
-  const user = useSelector((state) => state.user);
-  const orders = useSelector((state) => state.transaction).orders;
+const DeliveryList = () => {
   const [content, setContent] = useState(0);
+  const deliveries = useSelector((state) => state.transaction).deliveries;
+  const shop = useSelector((state) => state.shop);
+  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getTheBuyer(user._id, user.token));
-  }, [user, dispatch]);
+  useState(() => {
+    dispatch(getTheSeller(shop._id, user.token));
+  }, []);
 
   return (
     <div className="space-y-5">
       <div className="p-5 bg-white border border-gray-200 rounded-lg shadow __montserat-text">
-        <div className="font-semibold">Daftar Pesanan</div>
-        <div className="text-sm text-subtitle">Lihat semua pesanan anda</div>
+        <div className="font-semibold">Daftar Pengiriman</div>
+        <div className="text-sm text-subtitle">Lihat semua pengiriman anda</div>
       </div>
       <TabsDashboard setContent={setContent}>
         <div className="py-4">
-          <Table head={<Head />} body={<Body orders={orders} />} />
+          <Table head={<Head />} body={<Body deliveries={deliveries} />} />
         </div>
       </TabsDashboard>
     </div>
@@ -43,19 +43,18 @@ const Head = () => {
       <Th>STATUS</Th>
       <Th>TOTAL HARGA</Th>
       <Th>JUMLAH</Th>
-      <Th>DETAIL</Th>
     </tr>
   );
 };
 
-const Body = ({ orders }) => {
+const Body = ({ deliveries }) => {
   const products = useSelector((state) => state.products);
 
   const getProduct = (product_id) => {
     return products.find((product) => product._id === product_id);
   };
 
-  return orders.map((order, idx) => (
+  return deliveries.map((delivery, idx) => (
     <tr>
       <Td>{idx + 1}</Td>
       <Td>
@@ -63,27 +62,22 @@ const Body = ({ orders }) => {
           <div className="flex-shrink-0 w-16 h-16">
             <img
               className="w-16 h-16 rounded-full"
-              src={getProduct(order._productId).image}
-              alt={getProduct(order._productId).name}
+              src={getProduct(delivery._productId).image}
+              alt={getProduct(delivery._productId).name}
             />
           </div>
           <div className="ml-4">
             <div className="text-sm font-medium text-gray-900 max-w-px __text-elipsis-one-line">
-              {getProduct(order._productId).name}
+              {getProduct(delivery._productId).name}
             </div>
           </div>
         </div>
       </Td>
-      <Td>{parseStatus(order.status)}</Td>
-      <Td>Rp {Intl.NumberFormat('en-US').format(order.total_price)}</Td>
-      <Td>{order.quantity}</Td>
-      <Td>
-        <Link to="/checkout" state={{ order }}>
-          <BsBoxArrowUpRight className="hover:text-info" />
-        </Link>
-      </Td>
+      <Td>{parseStatus(delivery.status)}</Td>
+      <Td>Rp {Intl.NumberFormat('en-US').format(delivery.total_price)}</Td>
+      <Td>{delivery.quantity}</Td>
     </tr>
   ));
 };
 
-export default TransactionList;
+export default DeliveryList;

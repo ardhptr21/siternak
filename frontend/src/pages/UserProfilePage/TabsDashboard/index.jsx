@@ -7,20 +7,28 @@ const TabsDashboard = ({ children, setContent }) => {
       status: 0,
     },
     {
-      title: 'BELUM BAYAR',
+      title: 'BELUM DIBAYAR',
       status: 1,
     },
     {
-      title: 'DIKIRIM',
+      title: 'DIREVIEW',
       status: 2,
     },
     {
-      title: 'SELESAI',
+      title: 'SELESAI DIREVIEW',
       status: 3,
     },
     {
-      title: 'PEMBATALAN',
+      title: 'DIKIRIM',
       status: 4,
+    },
+    {
+      title: 'SELESAI',
+      status: 5,
+    },
+    {
+      title: 'DIBATALKAN',
+      status: 6,
     },
   ];
 
