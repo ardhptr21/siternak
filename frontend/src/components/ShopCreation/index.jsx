@@ -10,7 +10,7 @@ const ShopCreation = ({ isRenderForm }) => {
   const user = useSelector((state) => state.user);
 
   const [renderForm, setRenderForm] = useState(isRenderForm);
-  const [shopData, setShopData] = useState({ name: '', description: '' });
+  const [shopData, setShopData] = useState({ name: '', description: '', account_number: '' });
   const [shopFoto, setShopFoto] = useState(null);
   const [shopFotoPreview, setShopFotoPreview] = useState(null);
 
@@ -33,6 +33,7 @@ const ShopCreation = ({ isRenderForm }) => {
     formData.append('user_id', user._id);
     formData.append('name', shopData.name);
     formData.append('description', shopData.description);
+    formData.append('account_number', shopData.account_number);
     dispatch(createShop(formData, user.token));
   };
 
@@ -78,7 +79,21 @@ const ShopCreation = ({ isRenderForm }) => {
               name="name"
               value={shopData.name}
               onChange={handleChange}
+              placeholder="Toko Keren John Doe"
               required
+            />
+          </div>
+
+          <div className="grid grid-cols-1 mt-5 mx-7">
+            <label className="text-xs font-semibold text-gray-500 md:text-sm text-light">Nomor Rekening Toko</label>
+            <input
+              className="px-3 py-2 mt-1 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"
+              type="number"
+              name="account_number"
+              value={shopData.account_number}
+              onChange={handleChange}
+              required
+              placeholder="1560009861578"
             />
           </div>
 

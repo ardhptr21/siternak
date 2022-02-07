@@ -30,12 +30,14 @@ const SideMenu = () => {
           <SideMenuListItem path="/user-profile/bio" name="Profile" />
           <SideMenuListItem path="/user-profile/toko" name="Toko" />
         </SideMenuListContainer>
-        <SideMenuListContainer title="Produk">
-          <SideMenuListItem path="/user-profile/produk" name="Produk Saya" />
-          <SideMenuListItem path="/user-profile/tambah-produk" name="Tambah Produk" />
-        </SideMenuListContainer>
+        {user.isSeller && user.role === 0 && (
+          <SideMenuListContainer title="Produk">
+            <SideMenuListItem path="/user-profile/produk" name="Produk Saya" />
+            <SideMenuListItem path="/user-profile/tambah-produk" name="Tambah Produk" />
+          </SideMenuListContainer>
+        )}
         <SideMenuListContainer title="Transaksi">
-          <SideMenuListItem path="/user-profile/pengiriman" name="Pengiriman" />
+          {user.isSeller && user.role === 0 && <SideMenuListItem path="/user-profile/pengiriman" name="Pengiriman" />}
           <SideMenuListItem path="/user-profile/pesanan" name="Pesanan" />
         </SideMenuListContainer>
       </div>

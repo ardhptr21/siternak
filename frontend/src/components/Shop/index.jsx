@@ -16,6 +16,7 @@ const Shop = () => {
     return {
       name: shop.name,
       description: shop.description,
+      account_number: shop.account_number,
     };
   }, [shop]);
 
@@ -77,6 +78,14 @@ const Shop = () => {
           <div className="ml-12">
             <DashboardDataContainer title="Info Toko" margin="mt-5">
               <DashboardData title="Nama" value={shopData.name} isEdit={isEdit} onChange={handleChange} name="name" />
+              <DashboardData
+                title="Nomor Rekening"
+                value={shopData.account_number}
+                isEdit={isEdit}
+                onChange={handleChange}
+                name="account_number"
+                type="number"
+              />
               <DashboardData
                 title="Deskripsi"
                 value={shopData.description}
