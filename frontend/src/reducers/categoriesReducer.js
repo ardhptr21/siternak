@@ -1,4 +1,4 @@
-import { GET_CATEGORIES, ADD_CATEGORY } from '../actions/categories/categoriesTypes';
+import { GET_CATEGORIES, ADD_CATEGORY, DELETE_CATEGORY } from '../actions/categories/categoriesTypes';
 
 const initialState = [];
 
@@ -8,6 +8,8 @@ const categoriesReducer = (state = initialState, action) => {
       return action.payload;
     case ADD_CATEGORY:
       return [...state, action.payload];
+    case DELETE_CATEGORY:
+      return state.filter((category) => category._id !== action.payload);
     default:
       return state;
   }

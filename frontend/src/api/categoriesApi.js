@@ -21,3 +21,16 @@ export const createCategory = async (data, token) => {
     console.log(err);
   }
 };
+
+export const removeCategory = async (category_id, token) => {
+  try {
+    const result = await axiosInstance.delete(`/categories/${category_id}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+};

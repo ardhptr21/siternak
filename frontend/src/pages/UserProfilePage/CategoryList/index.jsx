@@ -5,6 +5,7 @@ import { FaEdit } from 'react-icons/fa';
 import { AiFillDelete } from 'react-icons/ai';
 import DashboardPages from '../DashboardPages';
 import { useDispatch, useSelector } from 'react-redux';
+import { deleteCategory } from '../../../actions/categories/categoriesActions';
 import { getAllCategories } from '../../../actions/categories/categoriesActions';
 import { useEffect } from 'react';
 
@@ -39,9 +40,17 @@ const Head = () => {
 
 const Body = () => {
   const categories = useSelector((state) => state.categories);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+
+  const handleDelete = (category_id) => {
+    const isDelete = window.confirm('Are you sure want to delete this category?');
+    if (!isDelete) return false;
+    dispatch(deleteCategory(category_id, user.token));
+  };
 
   return categories.map((category, idx) => (
-    <tr>
+    <tr key={idx}>
       <Td>{idx + 1}</Td>
       <Td>{category.name}</Td>
       <Td className="text-xs">{category.description}</Td>
@@ -53,6 +62,7 @@ const Body = () => {
         <AiFillDelete
           className="text-red-500 transition duration-300 transform cursor-pointer hover:scale-150"
           title="Hapus"
+          onClick={() => handleDelete(category._id)}
         />
       </Td>
     </tr>
