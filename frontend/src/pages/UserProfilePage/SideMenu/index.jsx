@@ -30,16 +30,30 @@ const SideMenu = () => {
           <SideMenuListItem path="/user-profile/bio" name="Profile" />
           <SideMenuListItem path="/user-profile/toko" name="Toko" />
         </SideMenuListContainer>
-        {user.isSeller && user.role === 0 && (
+        {user.isSeller && [0, 2].includes(user.role) && (
           <SideMenuListContainer title="Produk">
             <SideMenuListItem path="/user-profile/produk" name="Produk Saya" />
             <SideMenuListItem path="/user-profile/tambah-produk" name="Tambah Produk" />
           </SideMenuListContainer>
         )}
         <SideMenuListContainer title="Transaksi">
-          {user.isSeller && user.role === 0 && <SideMenuListItem path="/user-profile/pengiriman" name="Pengiriman" />}
+          {user.isSeller && [0, 2].includes(user.role) && (
+            <SideMenuListItem path="/user-profile/pengiriman" name="Pengiriman" />
+          )}
           <SideMenuListItem path="/user-profile/pesanan" name="Pesanan" />
         </SideMenuListContainer>
+        {user.role === 2 && (
+          <div className="mt-1 border-t-2">
+            <h3 className="inline-block px-5 mt-3 text-xs font-bold uppercase text-subtitle">Area Admin</h3>
+            <SideMenuListContainer title="Kategori">
+              <SideMenuListItem path="/user-profile/kategori" name="Kategori" />
+              <SideMenuListItem path="/user-profile/tambah-kategori" name="Tambah Kategori" />
+            </SideMenuListContainer>
+            <SideMenuListContainer title="Review Transaksi">
+              <SideMenuListItem path="/user-profile/review" name="Review" />
+            </SideMenuListContainer>
+          </div>
+        )}
       </div>
     </div>
   );

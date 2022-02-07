@@ -19,7 +19,7 @@ export const loginUser = (username, password) => async (dispatch) => {
     dispatch({ type: LOGIN, payload: data });
     setUserStorage(data._id, data.token);
     dispatch(getCartList(data._id, data.token));
-    if (data.isSeller && data.role === 0) {
+    if (data.isSeller && data.role !== 1) {
       dispatch(getShopById(result.data.data.user._id));
     }
   } catch (err) {
@@ -71,7 +71,7 @@ export const getOneUser = (user_id, token) => async (dispatch) => {
     const result = await getUser(user_id);
     dispatch({ type: GET_USER, payload: { ...result.data.data, token } });
     dispatch(getCartList(result.data.data._id, token));
-    if (result.data.data.isSeller && result.data.data.role === 0) {
+    if (result.data.data.isSeller && result.data.data.role !== 1) {
       dispatch(getShopById(result.data.data._id));
     }
   } catch (err) {

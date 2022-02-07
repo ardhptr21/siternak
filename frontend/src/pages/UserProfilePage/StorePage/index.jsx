@@ -8,7 +8,7 @@ const StorePage = () => {
   const { search } = useLocation();
   const fromUserProfile = new URLSearchParams(search).get('from') === 'user-profile';
 
-  return user.role === 0 && user.isSeller ? <Shop /> : <ShopCreation isRenderForm={fromUserProfile} />;
+  return user.role !== 1 && user.isSeller ? <Shop /> : <ShopCreation isRenderForm={fromUserProfile} />;
 };
 
 export default StorePage;

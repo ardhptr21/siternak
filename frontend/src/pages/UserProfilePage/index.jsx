@@ -4,7 +4,6 @@ import SideMenu from './SideMenu';
 import TransactionList from './TransactionList';
 import DeliveryList from './DeliveryList';
 import StorePage from './StorePage';
-import DashboarSeller from './DashboardSeller';
 import DashboardPages from './DashboardPages';
 import DashboardCreateProduct from './DashboardCreateProduct';
 import DashboardProduct from './DashboardProduct';
@@ -26,7 +25,6 @@ const UserProfile = () => {
         {type === 'tambah-produk' && <DashboardCreateProduct />}
         {type === 'produk' && <DashboardProduct />}
         {type === 'pengiriman' && <DeliveryList />}
-        {type === 'dashboard_seller' && <DashboarSeller />}
         {type === 'pesanan' && <TransactionList />}
         {type === 'dashboard_content' && <DashboardPages />}
       </div>
