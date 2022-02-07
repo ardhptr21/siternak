@@ -1,4 +1,5 @@
 import { ADD_TRANSACTION, GET_BUYER, GET_SELLER } from '../actions/transaction/transactionTypes';
+import { LOGOUT } from '../actions/user/userTypes';
 
 const initialState = {
   deliveries: [],
@@ -7,6 +8,8 @@ const initialState = {
 
 const transactionReducer = (state = initialState, action) => {
   switch (action.type) {
+    case LOGOUT:
+      return initialState;
     case GET_BUYER:
       return { ...state, orders: action.payload };
     case GET_SELLER:

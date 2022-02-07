@@ -17,9 +17,8 @@ export const loginUser = (username, password) => async (dispatch) => {
     const result = await signInUser(username, password);
     const data = { ...result.data.data.user, token: result.data.data.token };
     dispatch({ type: LOGIN, payload: data });
-
     setUserStorage(data._id, data.token);
-
+    dispatch(getCartList(data._id, data.token));
     if (data.isSeller && data.role === 0) {
       dispatch(getShopById(result.data.data.user._id));
     }

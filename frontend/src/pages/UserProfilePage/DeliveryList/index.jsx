@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { BsBoxArrowUpRight } from 'react-icons/bs';
 import parseStatus from '../../../utils/parseStatus';
 import Table from '../../../components/Table';
 import Th from '../../../components/Th';

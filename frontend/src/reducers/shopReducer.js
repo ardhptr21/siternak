@@ -1,4 +1,5 @@
 import { GET_BY_ID, UPDATE_SHOP, UPDATE_SHOP_IMAGE } from '../actions/shops/shopTypes';
+import { LOGOUT } from '../actions/user/userTypes';
 
 const initialState = {
   _id: '',
@@ -11,6 +12,8 @@ const initialState = {
 
 const shopReducer = (state = initialState, action) => {
   switch (action.type) {
+    case LOGOUT:
+      return initialState;
     case GET_BY_ID:
       return action.payload;
     case UPDATE_SHOP:
