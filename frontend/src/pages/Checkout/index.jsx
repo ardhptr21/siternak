@@ -6,6 +6,7 @@ import { shopByShopId } from '../../api/shopsApi';
 import parseAddress from '../../utils/parseAddress';
 import parseStatus from '../../utils/parseStatus';
 import { useSelector } from 'react-redux';
+import { BsImages } from 'react-icons/bs';
 
 const Checkout = () => {
   const navigation = useNavigate();
@@ -44,14 +45,24 @@ const Checkout = () => {
     }
   }, [order, navigation]);
 
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+    const preview = URL.createObjectURL(e.target.files[0]);
+    setImagePreview(preview);
+  };
+
   if (loading) return 'Loading...';
+
   return (
     <div className="text-gray-900 __montserat-text">
       <div className="mt-12">
         <div className="mycontainer-sm mobile:mycontainerfull gap-x-8">
           <h1 className="font-semibold">Checkout</h1>
-          <div className="grid mt-4 gap-x-4" style={{ gridTemplateColumns: '3fr 1fr' }}>
-            <div className="p-5 border rounded-md shadow">
+          <div className="flex items-start justify-center mt-4 gap-x-4">
+            <div className="p-5 border rounded-md shadow" style={{ flex: 2 }}>
               <div className="py-2 font-semibold border-b-2 text-md">Detail Pengiriman</div>
               <div className="pb-3 border-b-8 border-gray-200">
                 <div className="flex flex-col mt-5">
@@ -91,7 +102,7 @@ const Checkout = () => {
                 </div>
               </div>
             </div>
-            <div>
+            <div style={{ flex: 1 }}>
               <div className="p-5 border rounded-md shadow">
                 <div className="text-sm font-semibold">Ringkasan Belanja :</div>
                 <div className="py-4 mt-2 text-sm text-gray-600 border-b-2">
@@ -108,10 +119,28 @@ const Checkout = () => {
                   <div>Total Harga</div>
                   <div>Rp {Intl.NumberFormat('en-US').format(order.total_price)}</div>
                 </div>
+                <div className="flex items-center justify-between mt-5 text-sm font-semibold">
+                  <div>Transfer</div>
+                  <div>{shop.account_number}</div>
+                </div>
+                <div className="flex items-center justify-center w-full mt-5">
+                  <label className="flex flex-col w-full h-32 border-4 border-dashed hover:bg-gray-100 hover:border-gray-300 group">
+                    <div className="flex flex-col items-center justify-center pt-7">
+                      <BsImages className="w-10 h-10 text-gray-400 hover:text-gray-600" />
+                      <p className="pt-1 text-sm tracking-wider text-gray-400 lowercase group-hover:text-gray-600">
+                        foto bukti pembayaran
+                      </p>
+                    </div>
+                    <input type="file" className="hidden" onChange={handleImageChange} required />
+                  </label>
+                </div>
+                <div className="mt-5">
+                  {imagePreview && <img src={imagePreview} alt="preview" className="w-full" />}
+                </div>
                 {order.status === 0 && (
                   <div className="flex flex-col items-center justify-center mt-9">
                     <button className="w-full flex justify-center bg-gray-800 hover:text-gray-100 transition hover:border-textDefault items-center text-sm font-medium text-white py-2.5 px-3 border rounded">
-                      Kirim Bukti Pembayan
+                      Kirim Bukti Pembayaran
                     </button>
                   </div>
                 )}
