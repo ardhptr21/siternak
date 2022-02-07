@@ -12,7 +12,6 @@ const cartSchema = new mongoose.Schema({
         _productId: {
           type: mongoose.Types.ObjectId,
           required: true,
-          unique: true,
         },
         quantity: {
           type: Number,
