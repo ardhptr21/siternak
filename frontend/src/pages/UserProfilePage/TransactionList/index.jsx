@@ -56,7 +56,7 @@ const Body = ({ orders }) => {
   };
 
   return orders.map((order, idx) => (
-    <tr>
+    <tr key={idx}>
       <Td>{idx + 1}</Td>
       <Td>
         <div className="flex items-center">
@@ -78,7 +78,7 @@ const Body = ({ orders }) => {
       <Td>Rp {Intl.NumberFormat('en-US').format(order.total_price)}</Td>
       <Td>{order.quantity}</Td>
       <Td>
-        <Link to="/checkout" state={{ order }}>
+        <Link to={`/checkout/${order._id}`}>
           <BsBoxArrowUpRight className="hover:text-info" />
         </Link>
       </Td>

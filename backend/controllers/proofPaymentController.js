@@ -1,6 +1,8 @@
 const { request, response } = require('express');
 const ProofPayment = require('../models/ProofPayment');
 const Transaction = require('../models/Transaction');
+const { Types } = require('mongoose');
+const cloudinaryInstance = require('../configs/cloudinary.config');
 
 /**
  * Get All ProofPayment

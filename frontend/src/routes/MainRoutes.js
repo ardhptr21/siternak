@@ -37,7 +37,7 @@ const routeList = [
   },
   {
     name: 'Checkout Page',
-    path: '/checkout',
+    path: '/checkout/:transaction_id',
     exact: true,
     component: (
       <Auth>

@@ -1,16 +1,22 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { getUser } from '../../api/userApi';
 import { shopByShopId } from '../../api/shopsApi';
 import parseAddress from '../../utils/parseAddress';
 import parseStatus from '../../utils/parseStatus';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { BsImages } from 'react-icons/bs';
+import { uploadProofPayment } from '../../api/transactionApi';
+import { updateOrdersData } from '../../actions/transaction/transactionActions';
+import { useRef } from 'react';
+import { getProofPaymentImage } from '../../api/transactionApi';
 
 const Checkout = () => {
   const navigation = useNavigate();
-  const order = useLocation().state.order;
+  const transaction_id = useParams().transaction_id;
+  const orders = useSelector((state) => state.transaction).orders;
+  const [order, setOrder] = useState({});
   const [shop, setShop] = useState({});
   const products = useSelector((state) => state.products);
   const [product, setProduct] = useState({});
@@ -19,8 +25,17 @@ const Checkout = () => {
 
   useEffect(() => {
     setLoading(true);
+    const selected = orders.find((order) => order._id === transaction_id);
+    if (!selected) {
+      navigation('/', { replace: true });
+    }
+    setOrder(selected);
+  }, [orders, transaction_id, navigation]);
+
+  useEffect(() => {
+    setLoading(true);
     const productSelected = products.find((product) => product._id === order._productId);
-    shopByShopId(productSelected._shopId)
+    shopByShopId(productSelected?._shopId)
       .then((res) => {
         setShop(res.data.data);
         setProduct(productSelected);
@@ -39,19 +54,46 @@ const Checkout = () => {
       .catch((err) => console.log(err));
   }, [order, setUserBuyer]);
 
-  useEffect(() => {
-    if (!order) {
-      navigation('/', { replace: true });
-    }
-  }, [order, navigation]);
-
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState(undefined);
   const [imagePreview, setImagePreview] = useState(null);
+  const imageInput = useRef(null);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+  const [proofPaymentImage, setProofPaymentImage] = useState(null);
+
+  useEffect(() => {
+    setLoading(true);
+    getProofPaymentImage(order._id, user.token)
+      .then((res) => {
+        console.log(res.data.data);
+        setProofPaymentImage(res.data.data.image);
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
+  }, [order, user]);
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
     const preview = URL.createObjectURL(e.target.files[0]);
     setImagePreview(preview);
+  };
+
+  const handleUpload = async () => {
+    const formData = new FormData();
+    console.log(image);
+    formData.append('image', image);
+    formData.append('transaction_id', order._id);
+    try {
+      await uploadProofPayment(formData, user.token);
+      setTimeout(() => {
+        dispatch(updateOrdersData(order._id, 1));
+      }, 3000);
+      setImage(null);
+      setImagePreview(null);
+      imageInput.current.value = '';
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   if (loading) return 'Loading...';
@@ -123,25 +165,41 @@ const Checkout = () => {
                   <div>Transfer</div>
                   <div>{shop.account_number}</div>
                 </div>
-                <div className="flex items-center justify-center w-full mt-5">
-                  <label className="flex flex-col w-full h-32 border-4 border-dashed hover:bg-gray-100 hover:border-gray-300 group">
-                    <div className="flex flex-col items-center justify-center pt-7">
-                      <BsImages className="w-10 h-10 text-gray-400 hover:text-gray-600" />
-                      <p className="pt-1 text-sm tracking-wider text-gray-400 lowercase group-hover:text-gray-600">
-                        foto bukti pembayaran
-                      </p>
-                    </div>
-                    <input type="file" className="hidden" onChange={handleImageChange} required />
-                  </label>
-                </div>
-                <div className="mt-5">
-                  {imagePreview && <img src={imagePreview} alt="preview" className="w-full" />}
-                </div>
+
+                {order.status === 0 && (
+                  <div className="flex items-center justify-center w-full mt-5">
+                    <label className="flex flex-col w-full h-32 border-4 border-dashed hover:bg-gray-100 hover:border-gray-300 group">
+                      <div className="flex flex-col items-center justify-center pt-7">
+                        <BsImages className="w-10 h-10 text-gray-400 hover:text-gray-600" />
+                        <p className="pt-1 text-sm tracking-wider text-gray-400 lowercase group-hover:text-gray-600">
+                          foto bukti pembayaran
+                        </p>
+                      </div>
+                      <input type="file" className="hidden" onChange={handleImageChange} required ref={imageInput} />
+                    </label>
+                  </div>
+                )}
+
+                {imagePreview && (
+                  <div className="mt-5">
+                    <img src={imagePreview} alt="preview" className="w-full" />
+                  </div>
+                )}
+
                 {order.status === 0 && (
                   <div className="flex flex-col items-center justify-center mt-9">
-                    <button className="w-full flex justify-center bg-gray-800 hover:text-gray-100 transition hover:border-textDefault items-center text-sm font-medium text-white py-2.5 px-3 border rounded">
+                    <button
+                      className="w-full flex justify-center bg-gray-800 hover:text-gray-100 transition hover:border-textDefault items-center text-sm font-medium text-white py-2.5 px-3 border rounded"
+                      onClick={handleUpload}
+                    >
                       Kirim Bukti Pembayaran
                     </button>
+                  </div>
+                )}
+
+                {order.status >= 1 && (
+                  <div className="mt-5">
+                    <img src={proofPaymentImage} alt="proof payment" className="w-full" />
                   </div>
                 )}
               </div>

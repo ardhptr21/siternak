@@ -1,4 +1,4 @@
-import { ADD_TRANSACTION, GET_BUYER, GET_SELLER } from './transactionTypes';
+import { ADD_TRANSACTION, GET_BUYER, GET_SELLER, UPDATE_ORDER_DATA_STATUS } from './transactionTypes';
 import { create, getBuyer, getSeller } from '../../api/transactionApi';
 
 export const getTheBuyer = (buyer_id, token) => async (dispatch) => {
@@ -34,4 +34,11 @@ export const addTransaction = (data, token) => async (dispatch) => {
   } catch (err) {
     console.log(err);
   }
+};
+
+export const updateOrdersData = (transaction_id, status) => {
+  return {
+    type: UPDATE_ORDER_DATA_STATUS,
+    payload: { transaction_id, status },
+  };
 };

@@ -41,7 +41,7 @@ app.use('/transaction', transactionRoutes);
 app.use('/shops', shopRoutes);
 app.use('/auth', authRoutes);
 app.use('/cart', cartRoutes);
-app.use('/proof_payment', proofPaymentRoutes);
+app.use('/proof-payment', proofPaymentRoutes);
 
 app.get('/', (_, res) => {
   res.send('Hello World, Welcome to Siternak API');
