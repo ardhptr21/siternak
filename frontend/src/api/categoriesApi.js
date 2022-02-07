@@ -8,3 +8,16 @@ export const getCategories = async () => {
     console.log(error);
   }
 };
+
+export const createCategory = async (data, token) => {
+  try {
+    const result = await axiosInstance.post('/categories', data, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+};

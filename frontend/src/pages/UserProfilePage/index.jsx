@@ -4,10 +4,10 @@ import SideMenu from './SideMenu';
 import TransactionList from './TransactionList';
 import DeliveryList from './DeliveryList';
 import StorePage from './StorePage';
-import DashboardPages from './DashboardPages';
 import DashboardCreateProduct from './DashboardCreateProduct';
 import DashboardProduct from './DashboardProduct';
 import CategoryList from './CategoryList';
+import CategoryCreate from './CategoryCreate';
 
 const UserProfile = () => {
   let { type } = useParams();
@@ -27,8 +27,8 @@ const UserProfile = () => {
         {type === 'produk' && <DashboardProduct />}
         {type === 'pengiriman' && <DeliveryList />}
         {type === 'pesanan' && <TransactionList />}
-        {type === 'dashboard_content' && <DashboardPages />}
         {type === 'kategori' && <CategoryList />}
+        {type === 'tambah-kategori' && <CategoryCreate />}
       </div>
     </div>
   );
