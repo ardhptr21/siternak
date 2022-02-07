@@ -91,7 +91,7 @@ module.exports.getOneBySlug = async (req, res) => {
  * @param {response} res
  */
 module.exports.create = async (req, res) => {
-  const { user_id, name, description } = req.body;
+  const { user_id, name, description, account_number } = req.body;
   const _id = Types.ObjectId();
   try {
     let result = null;
@@ -102,7 +102,14 @@ module.exports.create = async (req, res) => {
       });
     }
 
-    const shop = await Shop.create({ _id, _userId: user_id, name, description, image: result?.secure_url ?? '' });
+    const shop = await Shop.create({
+      _id,
+      _userId: user_id,
+      name,
+      description,
+      account_number,
+      image: result?.secure_url ?? '',
+    });
     await User.findByIdAndUpdate(user_id, { isSeller: true, role: 0 });
     res.status(201).json({ status: 201, success: true, data: shop });
   } catch (err) {
@@ -134,12 +141,13 @@ module.exports.delete = async (req, res) => {
  * @param {response} res
  */
 module.exports.update = async (req, res) => {
-  const { name, description } = req.body;
+  const { name, description, account_number } = req.body;
   const id = req.params.id;
 
   const updatedShop = {};
   if (name) updatedShop.name = name;
   if (description) updatedShop.description = description;
+  if (account_number) updatedShop.account_number = account_number;
 
   try {
     const shop = await Shop.findByIdAndUpdate(id, updatedShop, { new: true, runValidators: true });

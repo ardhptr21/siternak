@@ -15,6 +15,10 @@ const shopSchema = new mongoose.Schema({
     type: String,
     required: [true, "Shop description can't be empty"],
   },
+  account_number: {
+    type: Number,
+    required: [true, "Shop account number can't be empty"],
+  },
   slug: {
     type: String,
   },
