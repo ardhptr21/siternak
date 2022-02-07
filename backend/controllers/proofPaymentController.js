@@ -1,5 +1,6 @@
 const { request, response } = require('express');
 const ProofPayment = require('../models/ProofPayment');
+const Transaction = require('../models/Transaction');
 
 /**
  * Get All ProofPayment
@@ -87,6 +88,8 @@ exports.addPayment = async (req, res) => {
       _transactionId: transaction_id,
       image: result?.secure_url ?? '',
     });
+
+    await Transaction.findByIdAndUpdate(transaction_id, { status: 1 }, { runValidators: true });
 
     res.status(201).json({ status: 201, success: true, data: proofPayment });
   } catch (err) {

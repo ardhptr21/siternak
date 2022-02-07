@@ -68,3 +68,50 @@ module.exports.getSellerById = async (req, res) => {
     return res.status(409).json({ status: 409, success: false, message: err.message });
   }
 };
+
+/**
+ * Change status of transaction from DIKIRIM to SELESAI / DIBATALKAN
+ *
+ * @param {request} req
+ * @param {response} res
+ */
+module.exports.changeStatus = async (req, res) => {
+  const transaction_id = req.params.id;
+  const { status } = req.body;
+
+  if (![3, 4, 5].includes(status)) {
+    return res.status(400).json({ status: 400, success: false, message: 'Status you provide is not valid' });
+  }
+
+  try {
+    const transaction = await Transaction.findByIdAndUpdate(
+      transaction_id,
+      { status },
+      { new: true, runValidators: true }
+    );
+    return res.status(200).json({ status: 200, success: true, data: transaction });
+  } catch (err) {
+    return res.status(500).json({ status: 500, success: false, message: err.message });
+  }
+};
+
+/**
+ * Change status to SELESAI DIREVIEW, only can change by superadmin
+ *
+ * @param {request} req
+ * @param {response} res
+ */
+module.exports.reviewDone = async (req, res) => {
+  const transaction_id = req.params.id;
+
+  try {
+    const transaction = await Transaction.findByIdAndUpdate(
+      transaction_id,
+      { status: 2 },
+      { new: true, runValidators: true }
+    );
+    return res.status(200).json({ status: 200, success: true, data: transaction });
+  } catch (err) {
+    return res.status(500).json({ status: 500, success: false, message: err.message });
+  }
+};
