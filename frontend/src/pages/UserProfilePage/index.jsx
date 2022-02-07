@@ -7,6 +7,7 @@ import StorePage from './StorePage';
 import DashboardPages from './DashboardPages';
 import DashboardCreateProduct from './DashboardCreateProduct';
 import DashboardProduct from './DashboardProduct';
+import CategoryList from './CategoryList';
 
 const UserProfile = () => {
   let { type } = useParams();
@@ -27,6 +28,7 @@ const UserProfile = () => {
         {type === 'pengiriman' && <DeliveryList />}
         {type === 'pesanan' && <TransactionList />}
         {type === 'dashboard_content' && <DashboardPages />}
+        {type === 'kategori' && <CategoryList />}
       </div>
     </div>
   );
