@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Tabel from '../../../components/Tabel';
+import Table from '../../../components/Table';
 import { BsPlusLg, BsCloudUploadFill } from 'react-icons/bs';
 import Modal from '../../../components/Modal';
 
@@ -97,7 +97,7 @@ const DashboarSeller = () => {
             </button>
           </div>
           <div className="mt-8">
-            <Tabel />
+            <Table />
           </div>
         </div>
       </div>
