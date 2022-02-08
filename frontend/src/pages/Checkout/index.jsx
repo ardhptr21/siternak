@@ -11,6 +11,7 @@ import { uploadProofPayment } from '../../api/transactionApi';
 import { updateTransactionStatus } from '../../actions/transaction/transactionActions';
 import { useRef } from 'react';
 import { getProofPaymentImage } from '../../api/transactionApi';
+import StatusChanger from '../../components/StatusChanger';
 
 const Checkout = () => {
   const navigation = useNavigate();
@@ -79,7 +80,6 @@ const Checkout = () => {
 
   const handleUpload = async () => {
     const formData = new FormData();
-    console.log(image);
     formData.append('image', image);
     formData.append('transaction_id', transaction?._id);
     try {
@@ -103,45 +103,53 @@ const Checkout = () => {
         <div className="mycontainer-sm mobile:mycontainerfull gap-x-8">
           <h1 className="font-semibold">Checkout</h1>
           <div className="flex items-start justify-center mt-4 gap-x-4">
-            <div className="p-5 border rounded-md shadow" style={{ flex: 2 }}>
-              <div className="py-2 font-semibold border-b-2 text-md">Detail Pengiriman</div>
-              <div className="pb-3 border-b-8 border-gray-200">
-                <div className="flex flex-col mt-5">
-                  <div className="text-sm font-semibold text-gray-800">Mr. {userBuyer.name}</div>
-                  <div className="text-xs font-medium text-subtitle __poppins-text">{userBuyer.telephone}</div>
+            <div style={{ flex: 2 }} className="space-y-4">
+              <div className="p-5 border rounded-md shadow">
+                <div className="py-2 font-semibold border-b-2 text-md">Detail Pengiriman</div>
+                <div className="pb-3 border-b-8 border-gray-200">
+                  <div className="flex flex-col mt-5">
+                    <div className="text-sm font-semibold text-gray-800">Mr. {userBuyer.name}</div>
+                    <div className="text-xs font-medium text-subtitle __poppins-text">{userBuyer.telephone}</div>
+                  </div>
+                  <div className="flex justify-between">
+                    <p className="mt-2 text-sm bg-white rounded-md outline-none text-blueGray-600">
+                      {parseAddress(userBuyer.address)}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex justify-between">
-                  <p className="mt-2 text-sm bg-white rounded-md outline-none text-blueGray-600">
-                    {parseAddress(userBuyer.address)}
-                  </p>
-                </div>
-              </div>
-              <div className="py-4">
-                <div className="flex items-center justify-between px-4 py-2 border-b-2 border-gray-100 border-t-1">
-                  <div className="flex items-center">
+                <div className="py-4">
+                  <div className="flex items-center justify-between px-4 py-2 border-b-2 border-gray-100 border-t-1">
+                    <div className="flex items-center">
+                      <img
+                        src={shop.image}
+                        alt={shop.name}
+                        className="object-cover w-12 h-12 transition rounded-full shadow-lg cursor-pointer"
+                      />
+                      <div className="ml-4">
+                        <p className="max-w-xs text-sm font-semibold __text-elipsis-one-line">{shop.name}</p>
+                        <p className="max-w-xs text-xs text-gray-400 __text-elipsis-one-line">{shop.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-start w-full px-8 pt-4">
                     <img
-                      src={shop.image}
-                      alt={shop.name}
-                      className="object-cover w-12 h-12 transition rounded-full shadow-lg cursor-pointer"
+                      src={product.image}
+                      alt={product.name}
+                      className="object-cover w-32 h-32 transition border-2 rounded-md shadow-lg cursor-pointer hover:border-subtitle"
                     />
-                    <div className="ml-4">
-                      <p className="max-w-xs text-sm font-semibold __text-elipsis-one-line">{shop.name}</p>
-                      <p className="max-w-xs text-xs text-gray-400 __text-elipsis-one-line">{shop.description}</p>
+                    <div className="w-full ml-4">
+                      <h3 className="mb-2 text-xl font-medium">{product.name}</h3>
+                      <p className="text-sm">{product.description}</p>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-start w-full px-8 pt-4">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="object-cover w-32 h-32 transition border-2 rounded-md shadow-lg cursor-pointer hover:border-subtitle"
-                  />
-                  <div className="w-full ml-4">
-                    <h3 className="mb-2 text-xl font-medium">{product.name}</h3>
-                    <p className="text-sm">{product.description}</p>
-                  </div>
-                </div>
               </div>
+              <StatusChanger
+                status={transaction?.status}
+                buyer_id={transaction._buyerId}
+                shop_id={transaction._shopId}
+                transaction_id={transaction._id}
+              />
             </div>
             <div style={{ flex: 1 }}>
               <div className="p-5 border rounded-md shadow">
@@ -202,7 +210,6 @@ const Checkout = () => {
                   </div>
                 )}
               </div>
-              <div className="mt-5 text-center">{parseStatus(transaction?.status)}</div>
             </div>
           </div>
         </div>

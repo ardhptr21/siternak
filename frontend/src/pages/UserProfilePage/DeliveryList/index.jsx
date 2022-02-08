@@ -6,20 +6,18 @@ import Th from '../../../components/Th';
 import Td from '../../../components/Td';
 import TabsDashboard from '../TabsDashboard';
 import { getAllTransactions } from '../../../actions/transaction/transactionActions';
-import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { BsBoxArrowUpRight } from 'react-icons/bs';
 
 const DeliveryList = () => {
   const [content, setContent] = useState(0);
-  const transactions = useSelector((state) => state.transaction);
-  const [deliveries, setDeliveries] = useState([]);
   const shop = useSelector((state) => state.shop);
+  const deliveries = useSelector((state) => state.transaction).filter(
+    (transaction) => transaction._shopId === shop._id
+  );
+
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const selectedDeliveries = transactions.filter((transaction) => transaction._sellerId === shop._id);
-    setDeliveries(selectedDeliveries);
-  }, [shop, transactions]);
 
   useState(() => {
     dispatch(getAllTransactions(user.token));
@@ -48,6 +46,7 @@ const Head = () => {
       <Th>STATUS</Th>
       <Th>TOTAL HARGA</Th>
       <Th>JUMLAH</Th>
+      <Th>DETAIL</Th>
     </tr>
   );
 };
@@ -81,6 +80,11 @@ const Body = ({ deliveries }) => {
       <Td>{parseStatus(delivery.status)}</Td>
       <Td>Rp {Intl.NumberFormat('en-US').format(delivery.total_price)}</Td>
       <Td>{delivery.quantity}</Td>
+      <Td>
+        <Link to={`/checkout/${delivery._id}`}>
+          <BsBoxArrowUpRight className="hover:text-info" />
+        </Link>
+      </Td>
     </tr>
   ));
 };

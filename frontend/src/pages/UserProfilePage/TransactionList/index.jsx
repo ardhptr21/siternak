@@ -12,16 +12,11 @@ import parseStatus from '../../../utils/parseStatus';
 
 const TransactionList = () => {
   const user = useSelector((state) => state.user);
-  const transactions = useSelector((state) => state.transaction);
-  const [orders, setOrders] = useState([]);
+  const orders = useSelector((state) => state.transaction).filter((transaction) => transaction._buyerId === user._id);
 
   const [content, setContent] = useState(0);
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    const selectedTransactions = transactions.filter((transaction) => transaction._buyerId === user._id);
-    setOrders(selectedTransactions);
-  }, [transactions, user]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllTransactions(user.token));
