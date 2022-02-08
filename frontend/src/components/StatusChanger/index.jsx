@@ -134,7 +134,11 @@ const StatusChanger = ({ status, buyer_id, shop_id, transaction_id }) => {
             untuk melakukan penarikan dana dari penjualan barang anda
           </p>
           <div className="text-right">
-            <a href={`https://wa.me/${process.env.REACT_APP_WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer">
+            <a
+              href={`https://wa.me/62${process.env.REACT_APP_WHATSAPP_NUMBER.slice(1)}`}
+              target="_blank"
+              rel="noreferrer"
+            >
               <button className="g-transparent flex justify-between transition hover:bg-subtitle items-center text-sm font-medium  py-1.5 px-3 border rounded-full bg-textDefault text-white">
                 Hubungi Admin
                 <span>

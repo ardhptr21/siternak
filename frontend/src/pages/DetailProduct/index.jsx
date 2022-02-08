@@ -133,7 +133,7 @@ const DetailProduct = () => {
                       <p className="max-w-xs text-xs text-gray-400 __text-elipsis-one-line">{shop?.description}</p>
                     </div>
                   </div>
-                  <a href={`https://wa.me/${user.telephone}`} target="_blank" rel="noreferrer">
+                  <a href={`https://wa.me/62${user.telephone.slice(1)}`} target="_blank" rel="noreferrer">
                     <button className="ml-2 bg-transparent flex justify-between hover:text-textDefault transition hover:border-textDefault items-center text-sm font-medium text-subtitle py-1.5 px-3 border rounded-full">
                       WhatsApp
                       <span>
