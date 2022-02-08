@@ -5,19 +5,26 @@ import Table from '../../../components/Table';
 import Th from '../../../components/Th';
 import Td from '../../../components/Td';
 import TabsDashboard from '../TabsDashboard';
-import { getTheBuyer } from '../../../actions/transaction/transactionActions';
+import { getAllTransactions } from '../../../actions/transaction/transactionActions';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import parseStatus from '../../../utils/parseStatus';
 
 const TransactionList = () => {
   const user = useSelector((state) => state.user);
-  const orders = useSelector((state) => state.transaction).orders;
+  const transactions = useSelector((state) => state.transaction);
+  const [orders, setOrders] = useState([]);
+
   const [content, setContent] = useState(0);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getTheBuyer(user._id, user.token));
+    const selectedTransactions = transactions.filter((transaction) => transaction._buyerId === user._id);
+    setOrders(selectedTransactions);
+  }, [transactions, user]);
+
+  useEffect(() => {
+    dispatch(getAllTransactions(user.token));
   }, [user, dispatch]);
 
   return (

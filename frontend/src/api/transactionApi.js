@@ -1,27 +1,12 @@
 import axiosInstance from '../axiosInstance';
 
-export const getBuyer = async (buyer_id, token) => {
+export const getAll = async (token) => {
   try {
-    const result = await axiosInstance.get(`transaction/buyer/${buyer_id}`, {
+    const result = await axiosInstance.get('/transaction', {
       headers: {
         Authorization: token,
       },
     });
-
-    return result;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const getSeller = async (shop_id, token) => {
-  try {
-    const result = await axiosInstance.get(`transaction/seller/${shop_id}`, {
-      headers: {
-        Authorization: token,
-      },
-    });
-
     return result;
   } catch (err) {
     console.log(err);
@@ -30,11 +15,12 @@ export const getSeller = async (shop_id, token) => {
 
 export const create = async (data, token) => {
   try {
-    axiosInstance.post('/transaction', data, {
+    const result = await axiosInstance.post('/transaction', data, {
       headers: {
         Authorization: token,
       },
     });
+    return result;
   } catch (err) {
     console.log(err);
   }

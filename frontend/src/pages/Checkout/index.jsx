@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { getUser } from '../../api/userApi';
@@ -8,15 +8,17 @@ import parseStatus from '../../utils/parseStatus';
 import { useDispatch, useSelector } from 'react-redux';
 import { BsImages } from 'react-icons/bs';
 import { uploadProofPayment } from '../../api/transactionApi';
-import { updateOrdersData } from '../../actions/transaction/transactionActions';
+import { updateTransactionStatus } from '../../actions/transaction/transactionActions';
 import { useRef } from 'react';
 import { getProofPaymentImage } from '../../api/transactionApi';
 
 const Checkout = () => {
   const navigation = useNavigate();
   const transaction_id = useParams().transaction_id;
-  const orders = useSelector((state) => state.transaction).orders;
-  const [order, setOrder] = useState({});
+  const transaction = useSelector((state) => state.transaction).find(
+    (transaction) => transaction._id === transaction_id
+  );
+
   const [shop, setShop] = useState({});
   const products = useSelector((state) => state.products);
   const [product, setProduct] = useState({});
@@ -24,17 +26,14 @@ const Checkout = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    const selected = orders.find((order) => order._id === transaction_id);
-    if (!selected) {
+    if (!transaction) {
       navigation('/', { replace: true });
     }
-    setOrder(selected);
-  }, [orders, transaction_id, navigation]);
+  }, [transaction, navigation]);
 
   useEffect(() => {
     setLoading(true);
-    const productSelected = products.find((product) => product._id === order._productId);
+    const productSelected = products.find((product) => product._id === transaction?._productId);
     shopByShopId(productSelected?._shopId)
       .then((res) => {
         setShop(res.data.data);
@@ -42,17 +41,17 @@ const Checkout = () => {
         setLoading(false);
       })
       .catch((err) => console.log(err));
-  }, [order, setShop, products]);
+  }, [transaction, setShop, products]);
 
   useEffect(() => {
     setLoading(true);
-    getUser(order._buyerId)
+    getUser(transaction?._buyerId)
       .then((res) => {
         setUserBuyer(res.data.data);
         setLoading(false);
       })
       .catch((err) => console.log(err));
-  }, [order, setUserBuyer]);
+  }, [transaction, setUserBuyer]);
 
   const [image, setImage] = useState(undefined);
   const [imagePreview, setImagePreview] = useState(null);
@@ -63,14 +62,14 @@ const Checkout = () => {
 
   useEffect(() => {
     setLoading(true);
-    getProofPaymentImage(order._id, user.token)
+    getProofPaymentImage(transaction?._id, user.token)
       .then((res) => {
         console.log(res.data.data);
         setProofPaymentImage(res.data.data.image);
       })
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
-  }, [order, user]);
+  }, [transaction, user]);
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
@@ -82,11 +81,11 @@ const Checkout = () => {
     const formData = new FormData();
     console.log(image);
     formData.append('image', image);
-    formData.append('transaction_id', order._id);
+    formData.append('transaction_id', transaction?._id);
     try {
       await uploadProofPayment(formData, user.token);
       setTimeout(() => {
-        dispatch(updateOrdersData(order._id, 1));
+        dispatch(updateTransactionStatus(transaction?._id, 1));
       }, 3000);
       setImage(null);
       setImagePreview(null);
@@ -154,19 +153,19 @@ const Checkout = () => {
                   </div>
                   <div className="flex items-center justify-between font-medium">
                     <div>Jumlah Barang</div>
-                    <div>{order.quantity} Barang</div>
+                    <div>{transaction?.quantity} Barang</div>
                   </div>
                 </div>
                 <div className="flex items-center justify-between mt-5 text-sm font-semibold">
                   <div>Total Harga</div>
-                  <div>Rp {Intl.NumberFormat('en-US').format(order.total_price)}</div>
+                  <div>Rp {Intl.NumberFormat('en-US').format(transaction?.total_price)}</div>
                 </div>
                 <div className="flex items-center justify-between mt-5 text-sm font-semibold">
                   <div>Transfer</div>
                   <div>{shop.account_number}</div>
                 </div>
 
-                {order.status === 0 && (
+                {transaction?.status === 0 && (
                   <div className="flex items-center justify-center w-full mt-5">
                     <label className="flex flex-col w-full h-32 border-4 border-dashed hover:bg-gray-100 hover:border-gray-300 group">
                       <div className="flex flex-col items-center justify-center pt-7">
@@ -186,7 +185,7 @@ const Checkout = () => {
                   </div>
                 )}
 
-                {order.status === 0 && (
+                {transaction?.status === 0 && (
                   <div className="flex flex-col items-center justify-center mt-9">
                     <button
                       className="w-full flex justify-center bg-gray-800 hover:text-gray-100 transition hover:border-textDefault items-center text-sm font-medium text-white py-2.5 px-3 border rounded"
@@ -197,13 +196,13 @@ const Checkout = () => {
                   </div>
                 )}
 
-                {order.status >= 1 && (
+                {transaction?.status >= 1 && (
                   <div className="mt-5">
                     <img src={proofPaymentImage} alt="proof payment" className="w-full" />
                   </div>
                 )}
               </div>
-              <div className="mt-5 text-center">{parseStatus(order.status)}</div>
+              <div className="mt-5 text-center">{parseStatus(transaction?.status)}</div>
             </div>
           </div>
         </div>

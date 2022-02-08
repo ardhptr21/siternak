@@ -5,17 +5,24 @@ import Table from '../../../components/Table';
 import Th from '../../../components/Th';
 import Td from '../../../components/Td';
 import TabsDashboard from '../TabsDashboard';
-import { getTheSeller } from '../../../actions/transaction/transactionActions';
+import { getAllTransactions } from '../../../actions/transaction/transactionActions';
+import { useEffect } from 'react';
 
 const DeliveryList = () => {
   const [content, setContent] = useState(0);
-  const deliveries = useSelector((state) => state.transaction).deliveries;
+  const transactions = useSelector((state) => state.transaction);
+  const [deliveries, setDeliveries] = useState([]);
   const shop = useSelector((state) => state.shop);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    const selectedDeliveries = transactions.filter((transaction) => transaction._sellerId === shop._id);
+    setDeliveries(selectedDeliveries);
+  }, [shop, transactions]);
+
   useState(() => {
-    dispatch(getTheSeller(shop._id, user.token));
+    dispatch(getAllTransactions(user.token));
   }, []);
 
   return (

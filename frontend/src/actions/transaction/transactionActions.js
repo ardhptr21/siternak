@@ -1,23 +1,11 @@
-import { ADD_TRANSACTION, GET_BUYER, GET_SELLER, UPDATE_ORDER_DATA_STATUS } from './transactionTypes';
-import { create, getBuyer, getSeller } from '../../api/transactionApi';
+import { ADD_TRANSACTION, UPDATE_STATUS_TRANSACTION, GET_ALL_TRANSACTIONS } from './transactionTypes';
+import { create, getAll } from '../../api/transactionApi';
 
-export const getTheBuyer = (buyer_id, token) => async (dispatch) => {
+export const getAllTransactions = (token) => async (dispatch) => {
   try {
-    const result = await getBuyer(buyer_id, token);
+    const result = await getAll(token);
     dispatch({
-      type: GET_BUYER,
-      payload: result.data.data,
-    });
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const getTheSeller = (shop_id, token) => async (dispatch) => {
-  try {
-    const result = await getSeller(shop_id, token);
-    dispatch({
-      type: GET_SELLER,
+      type: GET_ALL_TRANSACTIONS,
       payload: result.data.data,
     });
   } catch (err) {
@@ -27,18 +15,16 @@ export const getTheSeller = (shop_id, token) => async (dispatch) => {
 
 export const addTransaction = (data, token) => async (dispatch) => {
   try {
-    await create(data, token);
-    dispatch({ type: ADD_TRANSACTION });
-    dispatch(getBuyer(data.buyer_id, token));
-    dispatch(getSeller(data.shop_id, token));
+    const result = await create(data, token);
+    dispatch({ type: ADD_TRANSACTION, payload: result.data.data });
   } catch (err) {
     console.log(err);
   }
 };
 
-export const updateOrdersData = (transaction_id, status) => {
+export const updateTransactionStatus = (transaction_id, status) => {
   return {
-    type: UPDATE_ORDER_DATA_STATUS,
+    type: UPDATE_STATUS_TRANSACTION,
     payload: { transaction_id, status },
   };
 };
