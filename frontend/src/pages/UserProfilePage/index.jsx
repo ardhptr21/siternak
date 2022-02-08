@@ -8,6 +8,7 @@ import DashboardCreateProduct from './DashboardCreateProduct';
 import DashboardProduct from './DashboardProduct';
 import CategoryList from './CategoryList';
 import CategoryCreate from './CategoryCreate';
+import ReviewTransactionList from './ReviewTransactionList';
 
 const UserProfile = () => {
   let { type } = useParams();
@@ -29,6 +30,7 @@ const UserProfile = () => {
         {type === 'pesanan' && <TransactionList />}
         {type === 'kategori' && <CategoryList />}
         {type === 'tambah-kategori' && <CategoryCreate />}
+        {type === 'review' && <ReviewTransactionList />}
       </div>
     </div>
   );

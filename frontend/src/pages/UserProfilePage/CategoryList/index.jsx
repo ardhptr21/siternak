@@ -9,6 +9,7 @@ import { deleteCategory } from '../../../actions/categories/categoriesActions';
 import { getAllCategories } from '../../../actions/categories/categoriesActions';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Admin from '../../../middlewares/Admin';
 
 const CategoryList = () => {
   const dispatch = useDispatch();
@@ -18,13 +19,15 @@ const CategoryList = () => {
   }, [dispatch]);
 
   return (
-    <DashboardPages>
-      <div className="mb-11">
-        <div className="font-semibold">Kategori Produk</div>
-        <div className="text-sm text-subtitle">Kelola semua kategori untuk setiap produk</div>
-      </div>
-      <Table head={<Head />} body={<Body />} />
-    </DashboardPages>
+    <Admin>
+      <DashboardPages>
+        <div className="mb-11">
+          <div className="font-semibold">Kategori Produk</div>
+          <div className="text-sm text-subtitle">Kelola semua kategori untuk setiap produk</div>
+        </div>
+        <Table head={<Head />} body={<Body />} />
+      </DashboardPages>
+    </Admin>
   );
 };
 
