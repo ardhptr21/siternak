@@ -11,8 +11,8 @@ const StatusChanger = ({ status, buyer_id, shop_id, transaction_id }) => {
 
   const textShowNormal = {
     0: 'Pesanan ini belum dibayar',
-    1: 'Pesanan sedang direview oleh admin',
-    2: 'Pesanan anda selesai direview oleh admin',
+    1: 'Pesanan sudah dibayar, menunggu hasil verifikasi',
+    2: 'Pesanan anda telah tervifikasi',
     3: 'Pesanan sedang dalam proses pengiriman',
     4: 'Pesanan telah selesai, terima kasih',
     5: 'Pesanan ini telah dibatalkan',
@@ -68,7 +68,7 @@ const StatusChanger = ({ status, buyer_id, shop_id, transaction_id }) => {
         </div>
         <p>{textShowNormal[status]}</p>
         <div className="text-right">
-          {status !== 5 && (
+          {status !== 5 && status !== 3 && (
             <button
               className="px-4 py-2 mt-3 text-white rounded bg-danger hover:bg-red-800"
               onClick={() => handleUpdateStatusAction(5)}
