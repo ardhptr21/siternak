@@ -25,6 +25,7 @@ const Checkout = () => {
   const [product, setProduct] = useState({});
   const [userBuyer, setUserBuyer] = useState('');
   const [loading, setLoading] = useState(true);
+  const [transactionLoading, setTransactionLoading] = useState(false);
 
   useEffect(() => {
     if (!transaction) {
@@ -83,10 +84,12 @@ const Checkout = () => {
     formData.append('image', image);
     formData.append('transaction_id', transaction?._id);
     try {
+      setTransactionLoading(true);
       await uploadProofPayment(formData, user.token);
       setTimeout(() => {
         dispatch(updateTransactionStatus(transaction?._id, 1));
-      }, 3000);
+        setTransactionLoading(false);
+      }, 5000);
       setImage(null);
       setImagePreview(null);
       imageInput.current.value = '';
@@ -199,7 +202,7 @@ const Checkout = () => {
                       className="w-full flex justify-center bg-gray-800 hover:text-gray-100 transition hover:border-textDefault items-center text-sm font-medium text-white py-2.5 px-3 border rounded"
                       onClick={handleUpload}
                     >
-                      Kirim Bukti Pembayaran
+                      {transactionLoading ? 'Loading...' : 'Kirim Bukti Pembayaran'}
                     </button>
                   </div>
                 )}
