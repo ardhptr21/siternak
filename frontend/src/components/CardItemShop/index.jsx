@@ -39,10 +39,10 @@ const CardItemShop = ({ data, isInTransaction }) => {
     dispatch(removeFromCart(user._id, product._id, user.token));
   };
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     const isCheckout = window.confirm('Apakah anda yakin ingin melakukan checkout?');
     if (!isCheckout) return false;
-    dispatch(
+    const transaction = await dispatch(
       addTransaction(
         {
           product_id: product._id,
@@ -55,7 +55,7 @@ const CardItemShop = ({ data, isInTransaction }) => {
       )
     );
     dispatch(removeFromCart(user._id, product._id, user.token));
-    navigation('/user-profile/pesanan', { replace: true });
+    navigation(`/checkout/${transaction._id}`, { replace: true });
   };
 
   const getShop = async (shop_id) => {

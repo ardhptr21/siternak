@@ -15,7 +15,7 @@ const TabsDashboard = ({ children, setContent, content }) => {
       status: 2,
     },
     {
-      title: 'SELESAI DIREVIEW',
+      title: 'TERVERIFIKASI',
       status: 3,
     },
     {

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { getUser } from '../../api/userApi';
 import { shopByShopId } from '../../api/shopsApi';
 import parseAddress from '../../utils/parseAddress';
-import parseStatus from '../../utils/parseStatus';
+import parseDate from '../../utils/parseDate';
 import { useDispatch, useSelector } from 'react-redux';
 import { BsImages } from 'react-icons/bs';
 import { uploadProofPayment } from '../../api/transactionApi';
@@ -108,17 +108,18 @@ const Checkout = () => {
           <div className="flex items-start justify-center mt-4 gap-x-4">
             <div style={{ flex: 2 }} className="space-y-4">
               <div className="p-5 border rounded-md shadow">
-                <div className="py-2 font-semibold border-b-2 text-md">Detail Pengiriman</div>
+                <div className="py-2 font-semibold border-b-2 text-md">Detail Checkout</div>
                 <div className="pb-3 border-b-8 border-gray-200">
                   <div className="flex flex-col mt-5">
-                    <div className="text-sm font-semibold text-gray-800">Mr. {userBuyer.name}</div>
+                    <div className="text-sm font-semibold text-gray-800">{userBuyer.name}</div>
                     <div className="text-xs font-medium text-subtitle __poppins-text">{userBuyer.telephone}</div>
                   </div>
-                  <div className="flex justify-between">
-                    <p className="mt-2 text-sm bg-white rounded-md outline-none text-blueGray-600">
-                      {parseAddress(userBuyer.address)}
-                    </p>
-                  </div>
+                  <p className="mt-2 bg-white rounded-md outline-none text-blueGray-600">
+                    {parseAddress(userBuyer.address)}
+                  </p>
+                  <p className="mt-5 text-sm">
+                    <span className="font-bold">Tanggal Checkout :</span> {parseDate(transaction?.createdAt)}
+                  </p>
                 </div>
                 <div className="py-4">
                   <div className="flex items-center justify-between px-4 py-2 border-b-2 border-gray-100 border-t-1">
@@ -171,9 +172,19 @@ const Checkout = () => {
                   <div>Total Harga</div>
                   <div>Rp {Intl.NumberFormat('en-US').format(transaction?.total_price)}</div>
                 </div>
-                <div className="flex items-center justify-between mt-5 text-sm font-semibold">
-                  <div>Transfer</div>
-                  <div>{shop.account_number}</div>
+                <div className="justify-between mt-5 space-y-2 text-sm">
+                  <div className="font-semibold">Transfer</div>
+                  <div className="text-xs">
+                    <p>
+                      No Rekening : <strong>{process.env.REACT_APP_ACCOUNT_NUMBER}</strong>
+                    </p>
+                    <p>
+                      Nama Bank : <strong>{process.env.REACT_APP_BANK_NAME}</strong>
+                    </p>
+                    <p>
+                      Nama Pemilik : <strong>{process.env.REACT_APP_HOLDER_NAME}</strong>
+                    </p>
+                  </div>
                 </div>
 
                 {transaction?.status === 0 && (

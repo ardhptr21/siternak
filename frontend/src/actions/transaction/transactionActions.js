@@ -17,6 +17,7 @@ export const addTransaction = (data, token) => async (dispatch) => {
   try {
     const result = await create(data, token);
     dispatch({ type: ADD_TRANSACTION, payload: result.data.data });
+    return result.data.data;
   } catch (err) {
     console.log(err);
   }

@@ -2,6 +2,7 @@ import parseStatus from '../../utils/parseStatus';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateTransactionStatus } from '../../actions/transaction/transactionActions';
 import axiosInstance from '../../axiosInstance';
+import { BsWhatsapp } from 'react-icons/bs';
 
 const StatusChanger = ({ status, buyer_id, shop_id, transaction_id }) => {
   const user = useSelector((state) => state.user);
@@ -61,22 +62,32 @@ const StatusChanger = ({ status, buyer_id, shop_id, transaction_id }) => {
   return (
     <div className="p-5 border rounded-md shadow">
       <div>
-        <div className="flex justify-between items-center mb-5">
-          <h4 className="font-bold text-lg text-textDefault">Status Barang</h4>
+        <div className="flex items-center justify-between mb-5">
+          <h4 className="text-lg font-bold text-textDefault">Status Barang</h4>
           <div>{parseStatus(status)}</div>
         </div>
         <p>{textShowNormal[status]}</p>
+        <div className="text-right">
+          {status !== 5 && (
+            <button
+              className="px-4 py-2 mt-3 text-white rounded bg-danger hover:bg-red-800"
+              onClick={() => handleUpdateStatusAction(5)}
+            >
+              Batalkan Checkout
+            </button>
+          )}
+        </div>
       </div>
 
       {user.role === 2 && status === 1 && (
         <div className="mt-5 space-y-3">
-          <h4 className="font-bold text-lg text-textDefault">Aksi</h4>
+          <h4 className="text-lg font-bold text-textDefault">Aksi</h4>
           <p>
             Anda sebagai admin, silahkan konfirmasi apakah pesanan ini sudah sesuai untuk diproses ke tahap selanjutnya
           </p>
           <div className="text-right">
             <button
-              className="bg-success px-4 py-2 rounded hover:bg-green-800 text-white"
+              className="px-4 py-2 text-white rounded bg-success hover:bg-green-800"
               onClick={handleUpdateStatusByAdmin}
             >
               Ya, Konfirmasi
@@ -87,11 +98,11 @@ const StatusChanger = ({ status, buyer_id, shop_id, transaction_id }) => {
 
       {shop._id === shop_id && status === 2 && (
         <div className="mt-5 space-y-3">
-          <h4 className="font-bold text-lg text-textDefault">Aksi</h4>
+          <h4 className="text-lg font-bold text-textDefault">Aksi</h4>
           <p>Anda sebagai pemilik toko, silahkan konfirmasi jika pesanan sudah siap dikirim</p>
           <div className="text-right">
             <button
-              className="bg-success px-4 py-2 rounded hover:bg-green-800 text-white"
+              className="px-4 py-2 text-white rounded bg-success hover:bg-green-800"
               onClick={() => handleUpdateStatusAction(3)}
             >
               Ya, Konfirmasi
@@ -102,15 +113,35 @@ const StatusChanger = ({ status, buyer_id, shop_id, transaction_id }) => {
 
       {user._id === buyer_id && status === 3 && (
         <div className="mt-5 space-y-3">
-          <h4 className="font-bold text-lg text-textDefault">Aksi</h4>
+          <h4 className="text-lg font-bold text-textDefault">Aksi</h4>
           <p>Anda sebagai pembeli, silahkan konfirmasi jika barang sudah diterima</p>
           <div className="text-right">
             <button
-              className="bg-success px-4 py-2 rounded hover:bg-green-800 text-white"
+              className="px-4 py-2 text-white rounded bg-success hover:bg-green-800"
               onClick={() => handleUpdateStatusAction(4)}
             >
               Ya, Konfirmasi
             </button>
+          </div>
+        </div>
+      )}
+
+      {shop._id === shop_id && status === 4 && (
+        <div className="mt-5 space-y-3">
+          <h4 className="text-lg font-bold text-textDefault">Aksi</h4>
+          <p>
+            Anda sebagai pemilik toko, barang sudah dikonfirmasi dan diterima oleh pembeli, anda dapat menghubungi admin
+            untuk melakukan penarikan dana dari penjualan barang anda
+          </p>
+          <div className="text-right">
+            <a href={`https://wa.me/${process.env.REACT_APP_WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer">
+              <button className="g-transparent flex justify-between transition hover:bg-subtitle items-center text-sm font-medium  py-1.5 px-3 border rounded-full bg-textDefault text-white">
+                Hubungi Admin
+                <span>
+                  <BsWhatsapp className="ml-2 text-xl" />
+                </span>
+              </button>
+            </a>
           </div>
         </div>
       )}

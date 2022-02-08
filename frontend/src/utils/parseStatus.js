@@ -5,9 +5,7 @@ export default function parseStatus(status) {
     case 1:
       return <span className="inline-block p-3 text-sm text-white bg-blue-300 rounded-full">SELESAI DIBAYAR</span>;
     case 2:
-      return (
-        <span className="inline-block p-3 text-sm text-white bg-indigo-300 rounded-full bg-">SELESAI DIREVIEW</span>
-      );
+      return <span className="inline-block p-3 text-sm text-white bg-indigo-300 rounded-full bg-">TERVERIFIKASI</span>;
     case 3:
       return <span className="inline-block p-3 text-sm text-white bg-purple-300 rounded-full">DIKIRIM</span>;
     case 4:
