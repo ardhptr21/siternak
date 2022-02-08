@@ -9,6 +9,6 @@ router
   .get(userController.get)
   .put(isAuth, userController.update)
   .delete(isAdmin, userController.delete);
-router.route('/').get(isAdmin, userController.getAll).post(userController.create);
+router.route('/').get(userController.getAll).post(userController.create);
 
 module.exports = router;

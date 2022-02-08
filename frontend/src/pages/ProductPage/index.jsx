@@ -1,41 +1,88 @@
 import React, { useState } from 'react';
 import Card from '../../components/Card';
-import { AiOutlineCloseCircle } from 'react-icons/ai';
-import Dropdown from '../../components/Dropdown';
-import { staticConst } from '../../static/staticConst';
 import InputPrice from '../../components/InputPrice';
 import Radio from '@material-tailwind/react/radio';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setProducts } from '../../actions/products/productsActions';
+import { setProducts as setProductsActions } from '../../actions/products/productsActions';
+import axiosInstance from '../../axiosInstance';
 
 const ProductPage = () => {
-  const [filterDefault, setFilterDefault] = useState(['All Product']);
   const dispatch = useDispatch();
-  const products = useSelector((state) => state.products);
+
+  const initialProducts = useSelector((state) => state.products);
+  const categories = useSelector((state) => state.categories);
+
+  const [products, setProducts] = useState(initialProducts);
+
+  const [users, setUsers] = useState([]);
+  const [shops, setShops] = useState([]);
+  const [locations, setLocations] = useState([]);
+  const [locationFilter, setLocationFilter] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
+  const [priceFilter, setPriceFilter] = useState({ lower: 0, upper: 0 });
+
+  useState(() => {
+    axiosInstance
+      .get('/users')
+      .then((res) => {
+        const users = res.data.data;
+        setUsers(users);
+        setLocations(users.map((user) => user.address.city));
+      })
+      .catch((err) => console.log(err));
+
+    axiosInstance
+      .get('/shops')
+      .then((res) => {
+        setShops(res.data.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  // filtering
+  useEffect(() => {
+    let filtering = initialProducts;
+
+    // by location
+    if (locationFilter && locationFilter !== 'all_location') {
+      const filteringByLocation = filtering.filter((product) => {
+        const user_id = shops.find((shop) => shop._id === product._shopId)?._userId;
+        const location = users.find((user) => user._id === user_id)?.address?.city;
+        return location?.toLowerCase() === locationFilter;
+      });
+
+      filtering = filteringByLocation;
+    }
+
+    // by category
+    if (categoryFilter && categoryFilter !== 'all_category') {
+      const filteringByCategory = filtering.filter((product) => product._categoryId === categoryFilter);
+      filtering = filteringByCategory;
+    }
+
+    // by price
+    if (priceFilter.lower) {
+      const filteringByPriceLower = filtering.filter((product) => {
+        const price = product.price;
+        return price >= priceFilter.lower;
+      });
+      filtering = filteringByPriceLower;
+    }
+    if (priceFilter.upper) {
+      const filteringByPriceUpper = filtering.filter((product) => {
+        const price = product.price;
+        return price <= priceFilter.upper;
+      });
+      filtering = filteringByPriceUpper;
+    }
+
+    setProducts(filtering);
+  }, [initialProducts, locationFilter, users, shops, categoryFilter, priceFilter]);
 
   useEffect(() => {
-    dispatch(setProducts());
+    dispatch(setProductsActions());
   }, [dispatch]);
-
-  const handleChange = (e, name) => {
-    if (filterDefault.includes('All Product')) {
-      setFilterDefault([]);
-    }
-
-    if (!filterDefault.includes(name === 'lowerPrice' ? 'Lower Price' : 'Higher Price')) {
-      setFilterDefault((old) => [...old, name === 'lowerPrice' ? 'Lower Price' : 'Higher Price']);
-    }
-  };
-
-  const handleRadioChange = (e, name) => {
-    if (filterDefault.includes('All Product')) {
-      setFilterDefault([]);
-    }
-    if (!filterDefault.includes(name)) {
-      setFilterDefault((old) => [...old, name]);
-    }
-  };
 
   return (
     <div className="mt-3">
@@ -47,25 +94,42 @@ const ProductPage = () => {
           <div>
             <div>
               <p className="font-semibold text-subtitle">Price :</p>
-              <InputPrice placeHolder="Lower Price" handleChange={(e) => handleChange(e, 'lowerPrice')} />
-              <InputPrice placeHolder="Higher Price" handleChange={(e) => handleChange(e, 'higherPrice')} />
+              <InputPrice
+                placeHolder="Min Price"
+                handleChange={(e) => setPriceFilter({ ...priceFilter, lower: +e.target.value })}
+              />
+              <InputPrice
+                placeHolder="Max Price"
+                handleChange={(e) => setPriceFilter({ ...priceFilter, upper: +e.target.value })}
+              />
             </div>
             <div>
               <p className="mt-5 font-semibold text-subtitle">Location :</p>
               <div className="mt-2 form-control">
-                <form onChange={(e) => handleRadioChange(e, 'location')}>
+                <form onChange={(e) => setLocationFilter(e.target?.id?.toLowerCase())}>
                   <div className="mt-2">
-                    <Radio color="lightBlue" text="all" id="semua" name="location" />
+                    <Radio color="lightBlue" text="All" name="location" id="all_location" />
                   </div>
+                  {locations.map((location, idx) => (
+                    <div className="mt-2" key={idx}>
+                      <Radio color="lightBlue" text={location} name="location" id={location.toLowerCase()} />
+                    </div>
+                  ))}
+                </form>
+              </div>
+            </div>
+            <div>
+              <p className="mt-5 font-semibold text-subtitle">Category :</p>
+              <div className="mt-2 form-control">
+                <form onChange={(e) => setCategoryFilter(e.target.id)}>
                   <div className="mt-2">
-                    <Radio color="lightBlue" text="Jabodetabek" id="jabodetabek" name="location" />
+                    <Radio color="lightBlue" text="All" name="category" id="all_category" />
                   </div>
-                  <div className="mt-2">
-                    <Radio color="lightBlue" text="Surabaya" id="surabaya" name="location" />
-                  </div>
-                  <div className="mt-2">
-                    <Radio color="lightBlue" text="Bandung" id="bandung" name="location" />
-                  </div>
+                  {categories.map((category) => (
+                    <div className="mt-2" key={category._id}>
+                      <Radio color="lightBlue" text={category.name} name="category" id={category._id} />
+                    </div>
+                  ))}
                 </form>
               </div>
             </div>
@@ -73,19 +137,6 @@ const ProductPage = () => {
         </div>
         <div>
           <div className="min-h-screen mycontainer mobile:mycontainerfull">
-            <div className="grid" style={{ gridTemplateColumns: '1fr 120px' }}>
-              <div className="flex text-sm __montserat-text text-subtitle item-center">
-                {filterDefault.map((el, ind) => (
-                  <button
-                    key={ind}
-                    className="font-medium mr-1 py-1.5 px-4 rounded-full hover:text-textDefault border flex items-center"
-                  >
-                    {el} {el !== 'All Product' && <AiOutlineCloseCircle className="ml-5 text-xl" />}
-                  </button>
-                ))}
-              </div>
-              <Dropdown title="Sort by" viewMore={true} dropdownOpts={staticConst.sortOptions} />
-            </div>
             <div
               className="grid justify-between mt-5"
               style={{
