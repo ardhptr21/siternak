@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TabsDashboard = ({ children, setContent }) => {
+const TabsDashboard = ({ children, setContent, content }) => {
   const tabs = [
     {
       title: 'SEMUA',
@@ -11,7 +11,7 @@ const TabsDashboard = ({ children, setContent }) => {
       status: 1,
     },
     {
-      title: 'DIREVIEW',
+      title: 'SELESAI DIBAYAR',
       status: 2,
     },
     {
@@ -45,7 +45,9 @@ const TabsDashboard = ({ children, setContent }) => {
               {tabs.map((el, idx) => (
                 <li key={idx} className="nav-item" role="presentation">
                   <p
-                    className={`nav-link block font-medium text-xs leading-tight uppercase px-6 py-3 my-2 hover:bg-gray-100 cursor-pointer`}
+                    className={`nav-link block font-medium text-xs leading-tight uppercase px-6 py-3 my-2 hover:bg-gray-100 cursor-pointer ${
+                      el.status === content ? 'border-b-4 border-orange-600' : ''
+                    }`}
                     onClick={() => setContent(el.status)}
                   >
                     {el.title}

@@ -12,11 +12,24 @@ import parseStatus from '../../../utils/parseStatus';
 
 const TransactionList = () => {
   const user = useSelector((state) => state.user);
-  const orders = useSelector((state) => state.transaction).filter((transaction) => transaction._buyerId === user._id);
+
+  const initialOrders = useSelector((state) => state.transaction).filter(
+    (transaction) => transaction._buyerId === user._id
+  );
+  const [orders, setOrders] = useState(initialOrders);
 
   const [content, setContent] = useState(0);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (content === 0) {
+      setOrders(initialOrders);
+    } else {
+      const filtering = initialOrders.filter((order) => order.status + 1 === content);
+      setOrders(filtering);
+    }
+  }, [content, initialOrders]);
 
   useEffect(() => {
     dispatch(getAllTransactions(user.token));
@@ -28,7 +41,7 @@ const TransactionList = () => {
         <div className="font-semibold">Daftar Pesanan</div>
         <div className="text-sm text-subtitle">Lihat semua pesanan anda</div>
       </div>
-      <TabsDashboard setContent={setContent}>
+      <TabsDashboard setContent={setContent} content={content}>
         <div className="py-4">
           <Table head={<Head />} body={<Body orders={orders} />} />
         </div>

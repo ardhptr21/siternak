@@ -14,13 +14,21 @@ import { useEffect } from 'react';
 const ReviewTransactionList = () => {
   const [content, setContent] = useState(0);
 
-  const transactions = useSelector((state) => state.transaction).sort((a, b) => {
+  const initialTransactions = useSelector((state) => state.transaction).sort((a, b) => {
     if (a.status === 1) return -1;
     if (b.status === 1) return 1;
     return 0;
   });
+  const [transactions, setTransactions] = useState(initialTransactions);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (content === 0) {
+      setTransactions(initialTransactions);
+    } else {
+      const filtering = initialTransactions.filter((transaction) => transaction.status + 1 === content);
+      setTransactions(filtering);
+    }
+  }, [content, initialTransactions]);
 
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -36,7 +44,7 @@ const ReviewTransactionList = () => {
           <div className="font-semibold">Review Transaksi</div>
           <div className="text-sm text-subtitle">Disini anda sebagai admin dapat melihat semua transaksi yang ada</div>
         </div>
-        <TabsDashboard setContent={setContent}>
+        <TabsDashboard setContent={setContent} content={content}>
           <div className="py-4">
             <Table head={<Head />} body={<Body transactions={transactions} />} />
           </div>

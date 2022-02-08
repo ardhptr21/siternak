@@ -3,7 +3,7 @@ export default function parseStatus(status) {
     case 0:
       return <span className="inline-block p-3 text-sm text-white bg-yellow-300 rounded-full">BELUM DIBAYAR</span>;
     case 1:
-      return <span className="inline-block p-3 text-sm text-white bg-blue-300 rounded-full">DIREVIEW</span>;
+      return <span className="inline-block p-3 text-sm text-white bg-blue-300 rounded-full">SELESAI DIBAYAR</span>;
     case 2:
       return (
         <span className="inline-block p-3 text-sm text-white bg-indigo-300 rounded-full bg-">SELESAI DIREVIEW</span>

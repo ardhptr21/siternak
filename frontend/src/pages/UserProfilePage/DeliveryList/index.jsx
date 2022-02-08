@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import parseStatus from '../../../utils/parseStatus';
 import Table from '../../../components/Table';
@@ -12,12 +12,22 @@ import { BsBoxArrowUpRight } from 'react-icons/bs';
 const DeliveryList = () => {
   const [content, setContent] = useState(0);
   const shop = useSelector((state) => state.shop);
-  const deliveries = useSelector((state) => state.transaction).filter(
+  const initialDeliveries = useSelector((state) => state.transaction).filter(
     (transaction) => transaction._shopId === shop._id
   );
+  const [deliveries, setDeliveries] = useState(initialDeliveries);
 
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (content === 0) {
+      setDeliveries(initialDeliveries);
+    } else {
+      const filtering = initialDeliveries.filter((transaction) => transaction.status + 1 === content);
+      setDeliveries(filtering);
+    }
+  }, [content, initialDeliveries]);
 
   useState(() => {
     dispatch(getAllTransactions(user.token));
@@ -29,7 +39,7 @@ const DeliveryList = () => {
         <div className="font-semibold">Daftar Pengiriman</div>
         <div className="text-sm text-subtitle">Lihat semua pengiriman anda</div>
       </div>
-      <TabsDashboard setContent={setContent}>
+      <TabsDashboard setContent={setContent} content={content}>
         <div className="py-4">
           <Table head={<Head />} body={<Body deliveries={deliveries} />} />
         </div>
