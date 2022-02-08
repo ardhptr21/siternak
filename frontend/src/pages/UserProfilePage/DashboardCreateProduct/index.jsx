@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getAllCategories } from '../../../actions/categories/categoriesActions';
 import { addProduct, updateProduct } from '../../../actions/products/productsActions';
+import { useMemo } from 'react';
 
 const DashboardCreateProduct = () => {
   const categories = useSelector((state) => state.categories);
@@ -19,15 +20,31 @@ const DashboardCreateProduct = () => {
   const [imageData, setImageData] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
 
-  const initialProductDataState = {
-    category_id: product?._categoryId || categories[0]?._id,
-    name: product?.name || '',
-    description: product?.description || '',
-    price: product?.price || 0,
-    stock: product?.stock || 0,
-  };
+  const initialProductDataState = useMemo(
+    () => ({
+      category_id: categories[0]?._id,
+      name: '',
+      description: '',
+      price: 0,
+      stock: 0,
+    }),
+    [categories]
+  );
 
   const [productData, setProductData] = useState(initialProductDataState);
+
+  useEffect(() => {
+    setProductData(initialProductDataState);
+    if (product) {
+      setProductData({
+        category_id: product._categoryId,
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        stock: product.stock,
+      });
+    }
+  }, [product, initialProductDataState]);
 
   const handleChange = (e) => {
     setProductData({ ...productData, [e.target.name]: e.target.value });

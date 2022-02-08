@@ -34,3 +34,16 @@ export const removeCategory = async (category_id, token) => {
     console.log(err);
   }
 };
+
+export const updateCategory = async (category_id, data, token) => {
+  try {
+    const result = await axiosInstance.put(`/categories/${category_id}`, data, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+};

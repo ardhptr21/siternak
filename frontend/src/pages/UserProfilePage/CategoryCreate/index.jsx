@@ -2,18 +2,26 @@ import DashboardPages from '../DashboardPages';
 import { BiCategoryAlt } from 'react-icons/bi';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCategory } from '../../../actions/categories/categoriesActions';
-import { useNavigate } from 'react-router-dom';
+import { addCategory, editCategory } from '../../../actions/categories/categoriesActions';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useMemo } from 'react';
 
 const CategoryCreate = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const navigation = useNavigate();
+  const category = useLocation().state?.category;
 
-  const [categoryData, setCategoryData] = useState({
-    name: '',
-    description: '',
-  });
+  const initialState = useMemo(() => ({ name: '', description: '' }), []);
+  const [categoryData, setCategoryData] = useState(initialState);
+
+  useEffect(() => {
+    setCategoryData(initialState);
+    if (category) {
+      setCategoryData(category);
+    }
+  }, [category, initialState]);
 
   const handleChange = (e) => {
     setCategoryData({
@@ -24,10 +32,17 @@ const CategoryCreate = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addCategory(categoryData, user.token));
-    setTimeout(() => {
-      navigation('/user-profile/kategori', { replace: true });
-    }, 1000);
+    if (!category) {
+      dispatch(addCategory(categoryData, user.token));
+      setTimeout(() => {
+        navigation('/user-profile/kategori', { replace: true });
+      }, 1000);
+    } else {
+      dispatch(editCategory(category._id, categoryData, user.token));
+      setTimeout(() => {
+        navigation('/user-profile/kategori', { replace: true });
+      }, 1000);
+    }
   };
 
   return (
@@ -41,7 +56,7 @@ const CategoryCreate = () => {
 
         <div className="flex justify-center">
           <div className="flex">
-            <h1 className="text-xl font-bold text-gray-600 md:text-2xl">Tambah Kategori</h1>
+            <h1 className="text-xl font-bold text-gray-600 md:text-2xl">{category ? 'Perbarui' : 'Tambah'} Kategori</h1>
           </div>
         </div>
 
@@ -74,7 +89,7 @@ const CategoryCreate = () => {
             className="w-full px-4 py-2 font-medium text-white bg-green-500 rounded-lg shadow-xl hover:bg-green-700"
             type="submit"
           >
-            Tambah
+            {category ? 'Perbarui' : 'Tambah'}
           </button>
         </div>
       </form>

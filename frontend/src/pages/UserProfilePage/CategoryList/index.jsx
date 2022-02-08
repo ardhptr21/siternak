@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteCategory } from '../../../actions/categories/categoriesActions';
 import { getAllCategories } from '../../../actions/categories/categoriesActions';
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const CategoryList = () => {
   const dispatch = useDispatch();
@@ -55,10 +56,12 @@ const Body = () => {
       <Td>{category.name}</Td>
       <Td className="text-xs">{category.description}</Td>
       <Td className="flex items-center gap-5">
-        <FaEdit
-          className="text-yellow-500 transition duration-300 transform cursor-pointer hover:scale-150"
-          title="Edit"
-        />
+        <Link to="/user-profile/tambah-kategori" state={{ category }}>
+          <FaEdit
+            className="text-yellow-500 transition duration-300 transform cursor-pointer hover:scale-150"
+            title="Edit"
+          />
+        </Link>
         <AiFillDelete
           className="text-red-500 transition duration-300 transform cursor-pointer hover:scale-150"
           title="Hapus"
