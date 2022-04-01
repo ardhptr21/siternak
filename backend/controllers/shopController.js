@@ -34,7 +34,9 @@ module.exports.getOneByUserId = async (req, res) => {
       return res.status(404).json({ status: 404, success: false, message: 'Shop not found' });
     }
 
-    res.status(200).json({ status: 200, success: true, data: shop });
+    const user = await User.findById(shop._userId);
+
+    res.status(200).json({ status: 200, success: true, data: { ...shop._doc, telephone: user.telephone } });
   } catch (err) {
     res.status(500).json({ status: 500, success: false, message: err.message });
   }
@@ -56,8 +58,9 @@ module.exports.getOneByShopId = async (req, res) => {
     if (!shop) {
       return res.status(404).json({ status: 404, success: false, message: 'Shop not found' });
     }
+    const user = await User.findById(shop._userId);
 
-    res.status(200).json({ status: 200, success: true, data: shop });
+    res.status(200).json({ status: 200, success: true, data: { ...shop._doc, telephone: user.telephone } });
   } catch (err) {
     res.status(500).json({ status: 500, success: false, message: err.message });
   }

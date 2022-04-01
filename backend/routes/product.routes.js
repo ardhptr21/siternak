@@ -9,6 +9,7 @@ router
   .put(isAuth, multerInstance.single('image'), productController.update)
   .delete(isAuth, productController.delete);
 router.get('/:slug', productController.getOne);
+router.get('/:shop_id/shop', productController.getByShop);
 router.route('/').get(productController.getAll).post(isAuth, multerInstance.single('image'), productController.create);
 
 module.exports = router;

@@ -19,6 +19,22 @@ module.exports.getAll = async (req, res) => {
 };
 
 /**
+ * Get all products by shop id
+ *
+ * @param {request} req
+ * @param {response} res
+ */
+module.exports.getByShop = async (req, res) => {
+  const shop_id = req.params.shop_id;
+  try {
+    const products = await Product.find({ _shopId: Types.ObjectId(shop_id) });
+    res.status(200).json({ status: 200, success: true, data: products });
+  } catch (err) {
+    res.status(500).json({ status: 500, success: false, message: err.message });
+  }
+};
+
+/**
  * Get specific product
  *
  * @param {request} req
