@@ -16,8 +16,7 @@ const Card = ({ product, isAdmin = false, onDeleteEvent = () => {} }) => {
           className="object-cover w-48 h-44 rounded-t-xl"
         />
         <div className="p-3">
-          <p className="text-sm font-semibold text-textDefault __text-elipsis-one-line">{product?.name || 'no data'}</p>
-          <p className="mt-1 text-xs text-subtitle __text-elipsis-two-line">{product?.description || 'no data'}</p>
+          <p className="text-base text-textDefault __text-elipsis-one-line">{product?.name || 'no data'}</p>
           {product?.discount_price && (
             <div className="flex items-center mt-2">
               <span className="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-semibold leading-none text-red-100 bg-red-500 rounded-full">
@@ -31,6 +30,10 @@ const Card = ({ product, isAdmin = false, onDeleteEvent = () => {} }) => {
           <p className="text-textDefault text-sm font-semibold mt-1.5">
             Rp {Intl.NumberFormat('en-US').format(product?.price)}
           </p>
+          <div className="w-full h-1 my-2 bg-gray-200 inner-shadow"></div>
+          <small className="inline-block text-xs text-textDefault">
+            Terjual <span className="font-bold text-warning">{product?.total_sold || 0}</span>
+          </small>
         </div>
       </Link>
       {isAdmin && (
