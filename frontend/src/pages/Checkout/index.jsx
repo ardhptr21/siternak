@@ -172,50 +172,59 @@ const Checkout = () => {
                   <div>Total Harga</div>
                   <div>Rp {Intl.NumberFormat('en-US').format(transaction?.total_price)}</div>
                 </div>
-                <div className="justify-between mt-5 space-y-2 text-sm">
-                  <div className="font-semibold">Transfer</div>
-                  <div className="text-xs">
-                    <p>
-                      No Rekening : <strong>{process.env.REACT_APP_ACCOUNT_NUMBER}</strong>
-                    </p>
-                    <p>
-                      Nama Bank : <strong>{process.env.REACT_APP_BANK_NAME}</strong>
-                    </p>
-                    <p>
-                      Nama Pemilik : <strong>{process.env.REACT_APP_HOLDER_NAME}</strong>
-                    </p>
-                  </div>
-                </div>
 
-                {transaction?.status === 0 && (
-                  <div className="flex items-center justify-center w-full mt-5">
-                    <label className="flex flex-col w-full h-32 border-4 border-dashed hover:bg-gray-100 hover:border-gray-300 group">
-                      <div className="flex flex-col items-center justify-center pt-7">
-                        <BsImages className="w-10 h-10 text-gray-400 hover:text-gray-600" />
-                        <p className="pt-1 text-sm tracking-wider text-gray-400 lowercase group-hover:text-gray-600">
-                          foto bukti pembayaran
+                {user._id === transaction._buyerId && (
+                  <>
+                    <div className="justify-between mt-5 space-y-2 text-sm">
+                      <div className="font-semibold">Transfer</div>
+                      <div className="text-xs">
+                        <p>
+                          No Rekening : <strong>{process.env.REACT_APP_ACCOUNT_NUMBER}</strong>
+                        </p>
+                        <p>
+                          Nama Bank : <strong>{process.env.REACT_APP_BANK_NAME}</strong>
+                        </p>
+                        <p>
+                          Nama Pemilik : <strong>{process.env.REACT_APP_HOLDER_NAME}</strong>
                         </p>
                       </div>
-                      <input type="file" className="hidden" onChange={handleImageChange} required ref={imageInput} />
-                    </label>
-                  </div>
-                )}
+                    </div>
 
-                {imagePreview && (
-                  <div className="mt-5">
-                    <img src={imagePreview} alt="preview" className="w-full" />
-                  </div>
-                )}
-
-                {transaction?.status === 0 && (
-                  <div className="flex flex-col items-center justify-center mt-9">
-                    <button
-                      className="w-full flex justify-center bg-gray-800 hover:text-gray-100 transition hover:border-textDefault items-center text-sm font-medium text-white py-2.5 px-3 border rounded"
-                      onClick={handleUpload}
-                    >
-                      {transactionLoading ? 'Loading...' : 'Kirim Bukti Pembayaran'}
-                    </button>
-                  </div>
+                    {transaction?.status === 0 && (
+                      <div className="flex items-center justify-center w-full mt-5">
+                        <label className="flex flex-col w-full h-32 border-4 border-dashed hover:bg-gray-100 hover:border-gray-300 group">
+                          <div className="flex flex-col items-center justify-center pt-7">
+                            <BsImages className="w-10 h-10 text-gray-400 hover:text-gray-600" />
+                            <p className="pt-1 text-sm tracking-wider text-gray-400 lowercase group-hover:text-gray-600">
+                              foto bukti pembayaran
+                            </p>
+                          </div>
+                          <input
+                            type="file"
+                            className="hidden"
+                            onChange={handleImageChange}
+                            required
+                            ref={imageInput}
+                          />
+                        </label>
+                      </div>
+                    )}
+                    {imagePreview && (
+                      <div className="mt-5">
+                        <img src={imagePreview} alt="preview" className="w-full" />
+                      </div>
+                    )}
+                    {transaction?.status === 0 && (
+                      <div className="flex flex-col items-center justify-center mt-9">
+                        <button
+                          className="w-full flex justify-center bg-gray-800 hover:text-gray-100 transition hover:border-textDefault items-center text-sm font-medium text-white py-2.5 px-3 border rounded"
+                          onClick={handleUpload}
+                        >
+                          {transactionLoading ? 'Loading...' : 'Kirim Bukti Pembayaran'}
+                        </button>
+                      </div>
+                    )}
+                  </>
                 )}
 
                 {transaction?.status >= 1 && (

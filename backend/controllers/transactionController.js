@@ -1,4 +1,5 @@
 const { request, response } = require('express');
+const Product = require('../models/Product');
 const Transaction = require('../models/Transaction');
 
 /**
@@ -89,6 +90,7 @@ module.exports.changeStatus = async (req, res) => {
       { status },
       { new: true, runValidators: true }
     );
+
     return res.status(200).json({ status: 200, success: true, data: transaction });
   } catch (err) {
     return res.status(500).json({ status: 500, success: false, message: err.message });
@@ -110,6 +112,7 @@ module.exports.reviewDone = async (req, res) => {
       { status: 2 },
       { new: true, runValidators: true }
     );
+
     return res.status(200).json({ status: 200, success: true, data: transaction });
   } catch (err) {
     return res.status(500).json({ status: 500, success: false, message: err.message });

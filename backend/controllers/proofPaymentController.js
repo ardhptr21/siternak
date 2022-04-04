@@ -1,6 +1,7 @@
 const { request, response } = require('express');
 const ProofPayment = require('../models/ProofPayment');
 const Transaction = require('../models/Transaction');
+const Product = require('../models/Product');
 const { Types } = require('mongoose');
 const cloudinaryInstance = require('../configs/cloudinary.config');
 
@@ -91,8 +92,19 @@ exports.addPayment = async (req, res) => {
       image: result?.secure_url ?? '',
     });
 
-    await Transaction.findByIdAndUpdate(transaction_id, { status: 1 }, { runValidators: true });
+    const transaction = await Transaction.findByIdAndUpdate(
+      transaction_id,
+      { status: 1 },
+      { new: true, runValidators: true }
+    );
 
+    await Product.findByIdAndUpdate(
+      transaction._productId,
+      {
+        $inc: { total_sold: transaction.quantity, stock: -transaction.quantity },
+      },
+      { runValidators: true }
+    );
     res.status(201).json({ status: 201, success: true, data: proofPayment });
   } catch (err) {
     res.status(500).json({ status: 500, success: false, message: err.message });

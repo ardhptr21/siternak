@@ -22,6 +22,10 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Price can't be empty"],
     },
+    total_sold: {
+      type: Number,
+      default: 0,
+    },
     description: {
       type: String,
       required: [true, "Description can't be empty"],

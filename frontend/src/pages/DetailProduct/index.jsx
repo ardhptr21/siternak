@@ -9,6 +9,7 @@ import { shopByShopId } from '../../api/shopsApi';
 import { getUser } from '../../api/userApi';
 import { useCallback } from 'react';
 import { addToCart } from '../../actions/cart/cartActions';
+import { setProducts } from '../../actions/products/productsActions';
 
 const DetailProduct = () => {
   const dispatch = useDispatch();
@@ -22,6 +23,10 @@ const DetailProduct = () => {
   const [productData, setProductData] = useState(null);
   const [descCollapse, setDescCollapse] = useState(true);
   const [qty, setQty] = useState(1);
+
+  useEffect(() => {
+    dispatch(setProducts());
+  }, [dispatch]);
 
   const getShopData = useCallback(async (shop_id) => {
     try {
@@ -98,6 +103,9 @@ const DetailProduct = () => {
               </div>
               <p className="mt-4 text-xs text-gray-500">
                 Barang tersisa : <span className="font-semibold">{productData?.stock}</span>
+              </p>
+              <p className="mt-4 text-xs text-gray-500">
+                Barang terjual : <span className="font-semibold">{productData?.total_sold || 0}</span>
               </p>
               <div className="mt-3">
                 <p className="px-2 py-2 font-semibold border-t-2 border-b-2 border-gray-100">Detail :</p>
