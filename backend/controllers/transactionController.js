@@ -1,6 +1,7 @@
 const { request, response } = require('express');
-const Product = require('../models/Product');
 const Transaction = require('../models/Transaction');
+const User = require('../models/User');
+const Shop = require('../models/Shop');
 
 /**
  * Get the transactions
@@ -45,7 +46,15 @@ module.exports.getBuyerById = async (req, res) => {
   const buyer_id = req.params.buyer_id;
 
   try {
-    const transaction = await Transaction.find({ _buyerId: buyer_id });
+    let transaction = await Transaction.find({ _buyerId: buyer_id });
+    const buyer = await User.findById(buyer_id).select('name photo -_id');
+
+    transaction = transaction.map((item) => ({
+      ...item._doc,
+      buyer_name: buyer.name,
+      buyer_photo: buyer.photo,
+    }));
+
     return res.status(200).json({ status: 200, success: true, data: transaction });
   } catch (err) {
     return res.status(409).json({ status: 409, success: false, message: err.message });
@@ -63,7 +72,12 @@ module.exports.getSellerById = async (req, res) => {
   const shop_id = req.params.shop_id;
 
   try {
-    const transaction = await Transaction.find({ _shopId: shop_id });
+    let transaction = await Transaction.find({ _shopId: shop_id });
+
+    const seller = await Shop.findById(shop_id).select('name -_id');
+
+    transaction = transaction.map((item) => ({ seller_name: seller.name, ...item._doc }));
+
     return res.status(200).json({ status: 200, success: true, data: transaction });
   } catch (err) {
     return res.status(409).json({ status: 409, success: false, message: err.message });
