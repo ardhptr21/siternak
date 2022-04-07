@@ -1,7 +1,8 @@
 const { request, response } = require('express');
 const Transaction = require('../models/Transaction');
-const User = require('../models/User');
+const Product = require('../models/Product');
 const Shop = require('../models/Shop');
+const { Types } = require('mongoose');
 
 /**
  * Get the transactions
@@ -46,16 +47,16 @@ module.exports.getBuyerById = async (req, res) => {
   const buyer_id = req.params.buyer_id;
 
   try {
-    let transaction = await Transaction.find({ _buyerId: buyer_id });
-    const buyer = await User.findById(buyer_id).select('name photo -_id');
+    let transactions = await Transaction.find({ _buyerId: buyer_id });
+    const products = await Product.find().select('name image');
 
-    transaction = transaction.map((item) => ({
-      ...item._doc,
-      buyer_name: buyer.name,
-      buyer_photo: buyer.photo,
-    }));
+    transactions = transactions.map((transaction) => {
+      const product = products.find((product) => product._id.toString() === transaction._productId.toString());
 
-    return res.status(200).json({ status: 200, success: true, data: transaction });
+      return { ...transaction._doc, product_name: product.name, product_image: product.image };
+    });
+
+    return res.status(200).json({ status: 200, success: true, data: transactions });
   } catch (err) {
     return res.status(409).json({ status: 409, success: false, message: err.message });
   }
