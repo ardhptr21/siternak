@@ -1,5 +1,6 @@
 const { request, response } = require('express');
 const User = require('../models/User');
+const Shop = require('../models/Shop');
 const cloudinaryInstance = require('../configs/cloudinary.config');
 
 /**
@@ -38,6 +39,11 @@ module.exports.get = async (req, res) => {
     }
 
     delete user._doc.password;
+
+    if (user.isSeller) {
+      const shop = await Shop.findOne({ _userId: user._id }).select('_id');
+      user._doc._shopId = shop._id;
+    }
 
     return res.status(200).json({ status: 200, success: true, data: user });
   } catch (err) {
