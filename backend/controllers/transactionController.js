@@ -73,13 +73,22 @@ module.exports.getSellerById = async (req, res) => {
   const shop_id = req.params.shop_id;
 
   try {
-    let transaction = await Transaction.find({ _shopId: shop_id });
-
+    let transactions = await Transaction.find({ _shopId: shop_id });
     const seller = await Shop.findById(shop_id).select('name -_id');
+    const products = await Product.find().select('name image');
 
-    transaction = transaction.map((item) => ({ seller_name: seller.name, ...item._doc }));
+    transactions = transactions.map((transaction) => {
+      const product = products.find((product) => product._id.toString() === transaction._productId.toString());
 
-    return res.status(200).json({ status: 200, success: true, data: transaction });
+      return {
+        seller_name: seller.name,
+        product_name: product.name,
+        product_image: product.image,
+        ...transaction._doc,
+      };
+    });
+
+    return res.status(200).json({ status: 200, success: true, data: transactions });
   } catch (err) {
     return res.status(409).json({ status: 409, success: false, message: err.message });
   }
