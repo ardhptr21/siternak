@@ -1,5 +1,6 @@
 const { request, response } = require('express');
 const Cart = require('../models/Cart');
+const Product = require('../models/Product');
 
 /**
  * Get one cart by user id
@@ -12,8 +13,19 @@ module.exports.getByUserId = async (req, res) => {
   try {
     let cart = await Cart.findOne({ _userId });
 
-    if (!cart) {
-      cart = [];
+    if (cart?.carts?.length) {
+      const products = await Product.find();
+
+      cart._doc.carts = cart.carts.map((item) => {
+        const product = products.find((product) => product._id.toString() === item._productId.toString());
+        return {
+          product_name: product.name,
+          product_image: product.image,
+          product_price: product.price,
+          product_stock: product.stock,
+          ...item._doc,
+        };
+      });
     }
 
     res.status(200).json({ status: 200, success: true, data: cart });
