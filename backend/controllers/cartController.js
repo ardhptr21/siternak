@@ -58,6 +58,22 @@ module.exports.create = async (req, res) => {
       { $push: { carts: cartData } },
       { new: true, runValidators: true }
     );
+
+    if (cartItem?.carts?.length) {
+      const products = await Product.find();
+
+      cartItem._doc.carts = cartItem.carts.map((item) => {
+        const product = products.find((product) => product._id.toString() === item._productId.toString());
+        return {
+          product_name: product.name,
+          product_image: product.image,
+          product_price: product.price,
+          product_stock: product.stock,
+          ...item._doc,
+        };
+      });
+    }
+
     res.status(200).json({ status: 200, success: true, data: cartItem });
   } catch (err) {
     res.status(409).json({ status: 409, success: false, message: err.message });
@@ -92,6 +108,21 @@ module.exports.updateOne = async (req, res) => {
       { new: true, runValidators: true }
     );
 
+    if (cartItem?.carts?.length) {
+      const products = await Product.find();
+
+      cartItem._doc.carts = cartItem.carts.map((item) => {
+        const product = products.find((product) => product._id.toString() === item._productId.toString());
+        return {
+          product_name: product.name,
+          product_image: product.image,
+          product_price: product.price,
+          product_stock: product.stock,
+          ...item._doc,
+        };
+      });
+    }
+
     res.status(200).json({ status: 200, success: true, data: cartItem });
   } catch (err) {
     res.status(409).json({ status: 409, success: false, message: err.message });
@@ -115,6 +146,21 @@ module.exports.deleteCartItem = async (req, res) => {
       { $set: { carts } },
       { new: true, runValidators: true }
     );
+
+    if (cartItem?.carts?.length) {
+      const products = await Product.find();
+
+      cartItem._doc.carts = cartItem.carts.map((item) => {
+        const product = products.find((product) => product._id.toString() === item._productId.toString());
+        return {
+          product_name: product.name,
+          product_image: product.image,
+          product_price: product.price,
+          product_stock: product.stock,
+          ...item._doc,
+        };
+      });
+    }
 
     res.status(200).json({ status: 200, success: true, data: cartItem });
   } catch (err) {
